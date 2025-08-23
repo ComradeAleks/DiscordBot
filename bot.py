@@ -27,7 +27,7 @@ async def send_qotd(bot):
     response = get_chatgpt_response("Give me a question of the day (QOTD) dont say anything else than that question")
     bot.last_qotd = response
     for guild in bot.guilds:
-        channel = discord.utils.get(guild.text_channels, name="qotd")
+        channel = discord.utils.get(guild.text_channels, name="❓qotd")
         if channel:
             await channel.send(response)
 
