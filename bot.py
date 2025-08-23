@@ -27,7 +27,7 @@ async def send_qotd(bot):
     response = get_chatgpt_response("Give me a question of the day (QOTD) dont say anything else than that question")
     bot.last_qotd = response
     for guild in bot.guilds:
-        channel = discord.utils.get(guild.text_channels, name="qotd")
+        channel = discord.utils.get(guild.text_channels, name="❓qotd")
         if channel:
             await channel.send(response)
 
@@ -37,14 +37,15 @@ async def ping(interaction: discord.Interaction):
 
 @discord.app_commands.command(name="repeat", description="Repeats the last QOTD or fetches a new one if none exists.")
 async def repeat(interaction: discord.Interaction):
+    await interaction.response.defer()  # Immediately acknowledge the interaction to avoid timeout
     bot = interaction.client
     if hasattr(bot, 'last_qotd') and bot.last_qotd:
-        await interaction.response.send_message(bot.last_qotd)
+        await interaction.followup.send(bot.last_qotd)
     else:
         from chatgpt_api import get_chatgpt_response
         response = get_chatgpt_response("Give me a question of the day (QOTD) dont say anything else than that question")
         bot.last_qotd = response
-        await interaction.response.send_message(response)
+        await interaction.followup.send(response)
         
 
 bot = QOTDBot()
@@ -53,9 +54,11 @@ bot = QOTDBot()
 async def on_ready():
     print(f'Logged in as {bot.user.name}')
     await bot.tree.sync()
-    scheduler = AsyncIOScheduler(timezone=pytz.timezone('Europe/Oslo'))
-    scheduler.add_job(send_qotd, CronTrigger(hour=12, minute=0), args=[bot])
-    scheduler.start()
+    if not hasattr(bot, 'scheduler_started'):
+        scheduler = AsyncIOScheduler(timezone=pytz.timezone('Europe/Oslo'))
+        scheduler.add_job(send_qotd, CronTrigger(hour=12, minute=0), args=[bot])
+        scheduler.start()
+        bot.scheduler_started = True
 
 if __name__ == '__main__':
     bot.run(TOKEN)
