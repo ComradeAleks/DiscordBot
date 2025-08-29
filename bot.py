@@ -23,9 +23,35 @@ class QOTDBot(commands.Bot):
         self.tree.add_command(repeat)
 
 async def send_qotd(bot):
+    import json
     from chatgpt_api import get_chatgpt_response
-    response = get_chatgpt_response("Give me a question of the day (QOTD) dont say anything else than that question")
+    history_path = os.path.join(os.path.dirname(__file__), "qotd_history.json")
+    # Load last 31 QOTDs
+    if os.path.exists(history_path):
+        with open(history_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            history = data.get("history", [])
+    else:
+        history = []
+
+    last_31 = history[-31:]
+    last_deep = None
+    for i, q in enumerate(reversed(last_31)):
+        if "deep" in q.lower() or "philosoph" in q.lower() or "meaning" in q.lower():
+            last_deep = i
+            break
+
+    prompt = "Give me a question of the day (QOTD) that is not a duplicate or too similar of any of these: "
+    prompt += "; ".join(last_31) + ". "
+    prompt += "Vary the structure and wording of each question. Do not start questions similarly more than twice. Mix different types of questions. Avoid repeating similar formats or topics too often."
+    prompt += "Avoid deep or philosophical questions if one was asked in the last 7 days. ONLY reply with the question."
+
+    response = get_chatgpt_response(prompt)
     bot.last_qotd = response
+    # Save new QOTD, keep only last 31
+    history.append(response)
+    with open(history_path, "w", encoding="utf-8") as f:
+        json.dump({"history": history[-31:]}, f, ensure_ascii=False, indent=2)
     for guild in bot.guilds:
         channel = discord.utils.get(guild.text_channels, name="❓qotd")
         if channel:
@@ -42,9 +68,29 @@ async def repeat(interaction: discord.Interaction):
     if hasattr(bot, 'last_qotd') and bot.last_qotd:
         await interaction.followup.send(bot.last_qotd)
     else:
+        import json
         from chatgpt_api import get_chatgpt_response
-        response = get_chatgpt_response("Give me a question of the day (QOTD) dont say anything else than that question")
+        history_path = os.path.join(os.path.dirname(__file__), "qotd_history.json")
+        if os.path.exists(history_path):
+            with open(history_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                history = data.get("history", [])
+        else:
+            history = []
+        last_31 = history[-31:]
+        last_deep = None
+        for i, q in enumerate(reversed(last_31)):
+            if "deep" in q.lower() or "philosoph" in q.lower() or "meaning" in q.lower():
+                last_deep = i
+                break
+        prompt = "Give me a question of the day (QOTD) that is not a duplicate or too similar of any of these: "
+        prompt += "; ".join(last_31) + ". "
+        prompt += "Avoid deep or philosophical questions if one was asked in the last 7 days. ONLY reply with the question."
+        response = get_chatgpt_response(prompt)
         bot.last_qotd = response
+        history.append(response)
+        with open(history_path, "w", encoding="utf-8") as f:
+            json.dump({"history": history[-31:]}, f, ensure_ascii=False, indent=2)
         await interaction.followup.send(response)
         
 
