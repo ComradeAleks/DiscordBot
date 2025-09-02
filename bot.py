@@ -41,10 +41,13 @@ async def send_qotd(bot):
             last_deep = i
             break
 
-    prompt = "Give me a question of the day (QOTD) that is not a duplicate or too similar of any of these: "
+    prompt = "Your task is to give me a question of the day (QOTD) Follow these rules: "
+    prompt += "1. Each question should be unique. "
+    prompt += "2. All questions should have varying structure and wording and theme. "
+    prompt += "3. Questions should be simple and fun to answer (no economics, no death, no boring things). "
+    prompt += "4. Only reply with the question, nothing else. "
+    prompt += "These are the previous asked questions of the past month: "
     prompt += "; ".join(last_31) + ". "
-    prompt += "Vary the structure and wording of each question. Do not start questions similarly more than twice. Mix different types of questions. Avoid repeating similar formats or topics too often."
-    prompt += "Avoid deep or philosophical questions if one was asked in the last 7 days. ONLY reply with the question."
 
     response = get_chatgpt_response(prompt)
     bot.last_qotd = response
