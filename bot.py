@@ -75,6 +75,7 @@ async def check_pending_qotd(bot):
                 
                 if success_count > 0:
                     bot.last_qotd_date = today
+                    await save_last_qotd_date(today)
                     bot.last_qotd = bot.pending_qotd
                     bot.pending_qotd = None
                     bot.pending_qotd_date = None
@@ -88,6 +89,7 @@ async def check_pending_qotd(bot):
         
         # Check if we missed today's QOTD (no pending question and haven't sent today)
         elif bot.last_qotd_date != today:
+            logger.info(f"Last QOTD was sent on: {bot.last_qotd_date}, today is: {today}")
             # Check if it's past 12:00 PM (the scheduled time)
             import pytz
             oslo_tz = pytz.timezone('Europe/Oslo')
@@ -118,6 +120,7 @@ async def check_pending_qotd(bot):
                     
                     if success_count > 0:
                         bot.last_qotd_date = today
+                        await save_last_qotd_date(today)
                         bot.last_qotd = response
                         logger.info(f"Successfully sent makeup QOTD to {success_count} channels")
                     else:
@@ -130,21 +133,11 @@ async def check_pending_qotd(bot):
                     logger.error(f"Failed to generate makeup QOTD: {e}")
             else:
                 logger.info(f"Reconnected before today's QOTD time ({today_12pm.strftime('%H:%M')} Oslo time) - will wait for scheduled time")
+        else:
+            logger.info(f"QOTD already sent today ({bot.last_qotd_date}) - no need to send another")
                 
     except Exception as e:
         logger.error(f"Error checking pending QOTD: {e}")
-
-async def send_qotd(bot):
-
-    async def on_disconnect(self):
-        logger.warning("Bot disconnected from Discord!")
-        
-    async def on_resumed(self):
-        logger.info("Bot connection resumed!")
-        
-    async def close(self):
-        logger.info("Bot is shutting down...")
-        await super().close()
 
 async def send_qotd(bot):
     try:
@@ -213,6 +206,7 @@ async def send_qotd(bot):
                     
         if success_count > 0:
             bot.last_qotd_date = today  # Only mark as sent if actually successful
+            await save_last_qotd_date(today)
             logger.info(f"QOTD sent successfully to {success_count} channels")
         else:
             logger.warning("QOTD generation completed but couldn't send to any channels - stored as pending")
@@ -258,9 +252,13 @@ async def load_question_data():
         Format: [["Question text", {"total_score": 15, "vote_count": 2, "voters": ["user1", "user2"]}]]
     - highest_rated: List of top-rated questions (rating >= 5.0) - max 15
     - lowest_rated: List of low-rated questions (rating < 5.0) - max 15
+    - last_qotd_date: Date when the last QOTD was sent (for startup checks)
     """
     import json
+    import datetime
     history_path = os.path.join(os.path.dirname(__file__), "qotd_history.json")
+    
+    last_qotd_date = None
     
     if os.path.exists(history_path):
         with open(history_path, "r", encoding="utf-8") as f:
@@ -275,22 +273,34 @@ async def load_question_data():
                     # Convert string-based lists to new format too
                     highest_rated = convert_rating_lists_to_new_format(highest_rated)
                     lowest_rated = convert_rating_lists_to_new_format(lowest_rated)
+                    # No last_qotd_date in old format
+                    last_qotd_date = None
                 else:
                     # New format
                     history = data.get("history", [])
                     highest_rated = data.get("highest_rated", [])
                     lowest_rated = data.get("lowest_rated", [])
+                    # Load last QOTD date and convert from string to date object
+                    last_qotd_date_str = data.get("last_qotd_date")
+                    if last_qotd_date_str:
+                        try:
+                            last_qotd_date = datetime.datetime.fromisoformat(last_qotd_date_str).date()
+                        except (ValueError, TypeError):
+                            logger.warning(f"Invalid last_qotd_date format: {last_qotd_date_str}")
+                            last_qotd_date = None
             else:
                 # Very old format - just a list
                 history = [[q, None] for q in (data if isinstance(data, list) else [])]
                 highest_rated = []
                 lowest_rated = []
+                last_qotd_date = None
     else:
         history = []
         highest_rated = []
         lowest_rated = []
+        last_qotd_date = None
     
-    return history, highest_rated, lowest_rated
+    return history, highest_rated, lowest_rated, last_qotd_date
 
 def convert_old_format_to_new(old_history, old_rating_data):
     """Convert old separate history and rating_data to new combined format."""
@@ -395,14 +405,15 @@ def update_rating_lists_on_new_question(history, highest_rated, lowest_rated):
     
     return highest_rated, lowest_rated
 
-async def save_question_data(history, highest_rated=None, lowest_rated=None):
+async def save_question_data(history, highest_rated=None, lowest_rated=None, last_qotd_date=None):
     """Save question history and rating data to JSON file."""
     import json
+    import datetime
     history_path = os.path.join(os.path.dirname(__file__), "qotd_history.json")
     
     # Load existing data to preserve highest/lowest rated if not provided
     if highest_rated is None or lowest_rated is None:
-        _, existing_highest, existing_lowest = await load_question_data()
+        _, existing_highest, existing_lowest, _ = await load_question_data()
         if highest_rated is None:
             highest_rated = existing_highest
         if lowest_rated is None:
@@ -413,20 +424,38 @@ async def save_question_data(history, highest_rated=None, lowest_rated=None):
         history = history[-31:]
         logger.info(f"Trimmed history to last 31 questions")
     
+    # Convert date to string for JSON serialization
+    last_qotd_date_str = None
+    if last_qotd_date:
+        if isinstance(last_qotd_date, datetime.date):
+            last_qotd_date_str = last_qotd_date.isoformat()
+        else:
+            last_qotd_date_str = last_qotd_date
+    
     with open(history_path, "w", encoding="utf-8") as f:
         json.dump({
             "history": history,
             "highest_rated": highest_rated,
-            "lowest_rated": lowest_rated
+            "lowest_rated": lowest_rated,
+            "last_qotd_date": last_qotd_date_str
         }, f, ensure_ascii=False, indent=2)
     
     return history
+
+async def save_last_qotd_date(date):
+    """Save the last QOTD date to persistent storage without affecting question data."""
+    try:
+        history, highest_rated, lowest_rated, _ = await load_question_data()
+        await save_question_data(history, highest_rated, lowest_rated, date)
+        logger.info(f"Saved last QOTD date to storage: {date}")
+    except Exception as e:
+        logger.error(f"Failed to save last QOTD date: {e}")
 
 async def generate_new_qotd():
     """Generate a new QOTD using ChatGPT."""
     from chatgpt_api import get_chatgpt_response_with_retry
     
-    history, highest_rated, lowest_rated = await load_question_data()
+    history, highest_rated, lowest_rated, _ = await load_question_data()
     
     # Extract just the question text for recent history
     recent_questions = [q[0] for q in history[-31:]]
@@ -552,7 +581,7 @@ async def rate(interaction: discord.Interaction, rating: int):
         logger.info(f"User {interaction.user.display_name} rating QOTD with {rating}")
         
         # Load question data using shared function
-        history, highest_rated, lowest_rated = await load_question_data()
+        history, highest_rated, lowest_rated, _ = await load_question_data()
             
         if not history:
             await interaction.followup.send("No questions in history to rate!")
@@ -618,7 +647,7 @@ async def ratings(interaction: discord.Interaction):
     
     try:
         # Load question data
-        history, highest_rated, lowest_rated = await load_question_data()
+        history, highest_rated, lowest_rated, _ = await load_question_data()
         
         embed = discord.Embed(title="📊 Question Ratings", color=0x00ff00)
         
@@ -664,6 +693,17 @@ async def on_ready():
         logger.info("Command tree synced successfully")
     except Exception as e:
         logger.error(f"Failed to sync command tree: {e}")
+        
+    # Load the persistent last QOTD date from storage
+    try:
+        _, _, _, persistent_last_qotd_date = await load_question_data()
+        if persistent_last_qotd_date:
+            bot.last_qotd_date = persistent_last_qotd_date
+            logger.info(f"Loaded last QOTD date from storage: {persistent_last_qotd_date}")
+        else:
+            logger.info("No last QOTD date found in storage")
+    except Exception as e:
+        logger.error(f"Failed to load last QOTD date: {e}")
         
     # Only start scheduler once, and don't restart on reconnections
     if not bot.scheduler_started:
