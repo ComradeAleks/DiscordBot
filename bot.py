@@ -518,10 +518,13 @@ You are generating a Question of the Day (QOTD) for a Discord community in a {ch
 - What's a smell that instantly makes you happy?
 - What song always puts you in a good mood?
 
-### Examples of bad style
-- If you could change one law in the world, what would it be and why?
-- If you could have dinner with anyone in history, who would it be and why?
-- If you could design the perfect day, what would it include and why?
+### Avoid repetitive question starts
+Don't overuse the same question starters. Vary your approach and avoid patterns like:
+- "If you could..."
+- "What's your favorite..."
+- "Would you rather..."
+- "What's the..."
+Mix up your question structures to keep things fresh and interesting.
 
 ### Recent questions to avoid repeating ideas from:
 {recent_questions}
@@ -547,10 +550,13 @@ You are generating a Question of the Day (QOTD) for a Discord community.
 - What's a smell that instantly makes you happy?
 - What song always puts you in a good mood?
 
-### Examples of bad style
-- If you could change one law in the world, what would it be and why?
-- If you could have dinner with anyone in history, who would it be and why?
-- If you could design the perfect day, what would it include and why?
+### Avoid repetitive question starts
+Don't overuse the same question starters. Vary your approach and avoid patterns like:
+- "If you could..."
+- "What's your favorite..."
+- "Would you rather..."
+- "What's the..."
+Mix up your question structures to keep things fresh and interesting.
 
 ### Recent questions to avoid repeating ideas from:
 {recent_questions}
