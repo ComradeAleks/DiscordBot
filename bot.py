@@ -508,7 +508,7 @@ You are generating a Question of the Day (QOTD) for a Discord community in a {ch
 - Be unique, interesting, and quick to answer.
 - Be easy and fun — avoid anything serious, philosophical, or world-changing.
 - Keep it casual and conversational. No "If you could..." repetition.
-- Make sure the question is SHORT and natural to say in chat.
+- Make sure the question is not too long and natural to say in chat.
 - Avoid complex multi-part questions ("what, why, and how").
 - Match the {chosen_style} style while staying fun and casual.
 
@@ -531,7 +531,7 @@ Mix up your question structures to keep things fresh and interesting.
 
 ### Output format
 Respond with only one question, nothing else.
-Make it short, casual, and conversational.
+Make it not too long, casual, and conversational.
 """
     else:
         prompt = f"""
@@ -541,7 +541,7 @@ You are generating a Question of the Day (QOTD) for a Discord community.
 - Be unique, interesting, and quick to answer.
 - Be easy and fun — avoid anything serious, philosophical, or world-changing.
 - Keep it casual and conversational. No "If you could..." or other similar question repetitions.
-- Make sure the question is SHORT and natural to say in chat.
+- Make sure the question is not too long and natural to say in chat.
 - Avoid complex multi-part questions ("what, why, and how").
 
 ### Examples of good QOTD style
@@ -563,7 +563,7 @@ Mix up your question structures to keep things fresh and interesting.
 
 ### Output format
 Respond with only one question, nothing else.
-Make it short, casual, and conversational.
+Make it not too long, casual, and conversational.
 """
     
     response = await get_chatgpt_response_with_retry(prompt)
