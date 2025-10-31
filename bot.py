@@ -461,10 +461,11 @@ async def generate_new_qotd():
     recent_questions = [q[0] for q in history[-31:]]
     
     prompt = "Your task is to give me a question of the day (QOTD) Follow these rules: "
-    prompt += "1. Each question should be unique. "
+    prompt += "1. Each question should be unique, no similar theme. "
     prompt += "2. All questions should have varying structure and wording and theme. "
     prompt += "3. Questions should be simple and fun to answer (no economics, no death, no boring things). "
     prompt += "4. Only reply with the question, nothing else. "
+    prompt += "5. Do not write questions with the same theme or structure AT ALL, as the lower rated questions provided under."
     prompt += "These are the previous asked questions of the past month: "
     prompt += "; ".join(recent_questions) + ". "
     
@@ -480,7 +481,7 @@ async def generate_new_qotd():
         prompt += "AVOID these question formats and styles (these were poorly rated): "
         prompt += "; ".join(low_rated_questions) + ". "
     
-    prompt += "questions might be rated on a scale from 1 to 10 on how good they are, try to ask questions more aligning with 8-10 in structure."
+    prompt += "questions might be rated on a scale from 1 to 10 on how good they are, ask questions more aligning with 8-10 in structure."
     
     response = await get_chatgpt_response_with_retry(prompt)
     

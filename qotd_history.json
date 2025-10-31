@@ -1,18 +1,587 @@
 {
   "history": [
-    ["What is one thing you could do today that would make a significant positive impact on your life?", null],
-    ["What positive change are you going to enact in your life today?", null],
-    ["What is one small thing you would change about your day-to-day life that you believe would have a positive impact?", null],
-    ["What is one habit you want to develop this year to positively influence your life?", null],
-    ["What is one thing you wish you knew when you were younger?", null],
-    ["What does success mean to you and how do you measure it?", null],
-    ["What is the most important thing you want to achieve in life?", null],
-    ["What would you do if someone is crushing on you, and you like him or her as well?", null],
-    ["How would you utilize an unexpected free day to your maximum benefit?", null],
-    ["Who is a person in your life that greatly inspires you and how do they motivate you?", null],
-    ["If you could master any skill or talent in just one day, what would you choose and why?", null],
-    ["If you were given the opportunity to learn a new language instantly, which language would you choose and why?", null]
+    [
+      "If you could experience a day in the life of any fictional character, who would you choose and why?",
+      {
+        "total_score": 9,
+        "vote_count": 2,
+        "voters": [
+          "691931080902574110",
+          "699424739017359420"
+        ]
+      }
+    ],
+    [
+      "If there was a movie made of your life, who would you want to play your character and why?",
+      {
+        "total_score": 22,
+        "vote_count": 3,
+        "voters": [
+          "691931080902574110",
+          "227768769425047562",
+          "699424739017359420"
+        ]
+      }
+    ],
+    [
+      "If you could teleport to any place in the world right now, just for a day, where would you choose and what would you do there?",
+      null
+    ],
+    [
+      "If you could have one superpower for a day, what would it be and how would you use it?",
+      {
+        "total_score": 23,
+        "vote_count": 3,
+        "voters": [
+          "227768769425047562",
+          "248075518136549386",
+          "699424739017359420"
+        ]
+      }
+    ],
+    [
+      "If you could undertake an extraordinary adventure anywhere in the world, what would it entail and why?",
+      {
+        "total_score": 4,
+        "vote_count": 3,
+        "voters": [
+          "691931080902574110",
+          "227768769425047562",
+          "699424739017359420"
+        ]
+      }
+    ],
+    [
+      "If you could be transformed into any animal for a day, which one would you choose and how would you spend your day?",
+      {
+        "total_score": 16,
+        "vote_count": 2,
+        "voters": [
+          "227768769425047562",
+          "691931080902574110"
+        ]
+      }
+    ],
+    [
+      "If you could create your ideal meal consisting of an appetizer, main course, dessert, and beverage, what would each be and why?",
+      {
+        "total_score": 21,
+        "vote_count": 3,
+        "voters": [
+          "691931080902574110",
+          "227768769425047562",
+          "699424739017359420"
+        ]
+      }
+    ],
+    [
+      "If you were to write a children's book, what moral or life lesson would you want to impart, and how would you weave it into your story?",
+      {
+        "total_score": 11,
+        "vote_count": 3,
+        "voters": [
+          "699424739017359420",
+          "227768769425047562",
+          "691931080902574110"
+        ]
+      }
+    ],
+    [
+      "If you could travel back in time to witness any single historical event firsthand, what event would you choose and why?",
+      {
+        "total_score": 11,
+        "vote_count": 2,
+        "voters": [
+          "691931080902574110",
+          "699424739017359420"
+        ]
+      }
+    ],
+    [
+      "If you could compose the soundtrack to your life, which three songs would you select and why?",
+      null
+    ],
+    [
+      "If you could make a rule for a day and everyone had to follow it, what would it be and why?",
+      {
+        "total_score": 7,
+        "vote_count": 1,
+        "voters": [
+          "227768769425047562"
+        ]
+      }
+    ],
+    [
+      "If you could choose one item to represent you, what would that item be and why does it symbolize you?",
+      {
+        "total_score": 2,
+        "vote_count": 1,
+        "voters": [
+          "691931080902574110"
+        ]
+      }
+    ],
+    [
+      "If you could have dinner at any restaurant in the world, where would it be, what would you order, and who would you invite to join you?",
+      {
+        "total_score": 15,
+        "vote_count": 2,
+        "voters": [
+          "691931080902574110",
+          "699424739017359420"
+        ]
+      }
+    ],
+    [
+      "If you could transform your current home into your dream home, what changes would you make, and why are these changes important to you?",
+      {
+        "total_score": 15,
+        "vote_count": 3,
+        "voters": [
+          "699424739017359420",
+          "691931080902574110",
+          "227768769425047562"
+        ]
+      }
+    ],
+    [
+      "If you could choose to master an instrument instantly, which one would it be and why?",
+      {
+        "total_score": 12,
+        "vote_count": 2,
+        "voters": [
+          "691931080902574110",
+          "699424739017359420"
+        ]
+      }
+    ],
+    [
+      "If you could design the perfect mini-vacation for yourself, where would you go, what would you see or do, and why is this your ideal short getaway?",
+      {
+        "total_score": 14,
+        "vote_count": 2,
+        "voters": [
+          "227768769425047562",
+          "699424739017359420"
+        ]
+      }
+    ],
+    [
+      "If you could transform your everyday commute into an enjoyable experience, how would you change it and what would it involve?",
+      {
+        "total_score": 1,
+        "vote_count": 1,
+        "voters": [
+          "691931080902574110"
+        ]
+      }
+    ],
+    [
+      "If you could bring one fictional character to life for a day, who would it be and what would you do together?",
+      null
+    ],
+    [
+      "If you were asked to create an original board game, what would the theme be, what rules would you set, and what makes it enjoyable and unique?",
+      {
+        "total_score": 6,
+        "vote_count": 2,
+        "voters": [
+          "227768769425047562",
+          "699424739017359420"
+        ]
+      }
+    ],
+    [
+      "If you could integrate one habit from another culture into your daily routine, what would it be and why do you think it would be beneficial for you?",
+      {
+        "total_score": 1,
+        "vote_count": 1,
+        "voters": [
+          "691931080902574110"
+        ]
+      }
+    ],
+    [
+      "If you were given the ability to speak and understand every single language for a day, where would you go, what would you do, and why?",
+      null
+    ],
+    [
+      "If you could momentarily pause time, what would you do with that moment and why?",
+      null
+    ],
+    [
+      "If you could design the perfect day from morning until night, what activities would it include, where would it take place, and who would you spend it with?",
+      {
+        "total_score": 3,
+        "vote_count": 1,
+        "voters": [
+          "699424739017359420"
+        ]
+      }
+    ],
+    [
+      "If you could choose to be a main character in any book for a day, who would you be, what would you do, and why did you choose this particular character and book?",
+      null
+    ],
+    [
+      "If you could spend a day in your favorite painting or photograph, which one would it be and how would you pass your time there?",
+      {
+        "total_score": 1,
+        "vote_count": 1,
+        "voters": [
+          "699424739017359420"
+        ]
+      }
+    ],
+    [
+      "If you could participate in the creation of any famous work of art, what would it be, and in what ways do you think your influence would change the final piece?",
+      {
+        "total_score": 1,
+        "vote_count": 1,
+        "voters": [
+          "699424739017359420"
+        ]
+      }
+    ],
+    [
+      "If you were to star as the protagonist in a video game for a day, which game would it be, what adventures would you undertake, and why did you choose this particular game?",
+      null
+    ],
+    [
+      "If you could step into the universe of any cartoon, which one would it be, what character would you interact with most, and why?",
+      null
+    ],
+    [
+      "If you woke up tomorrow with a newfound talent, what would you want that talent to be, how would you make the most out of it, and why did you choose this particular talent?",
+      {
+        "total_score": 20,
+        "vote_count": 3,
+        "voters": [
+          "699424739017359420",
+          "691931080902574110",
+          "227768769425047562"
+        ]
+      }
+    ],
+    [
+      "If you could host a talk show for a day, who would be your dream guest, what interesting questions would you ask, and why did you choose this individual?",
+      {
+        "total_score": 1,
+        "vote_count": 1,
+        "voters": [
+          "699424739017359420"
+        ]
+      }
+    ],
+    [
+      "If you could start a social movement that could positively impact the world, what would it be about, how would you get it started, and why do you think it's important?",
+      {
+        "total_score": 10,
+        "vote_count": 1,
+        "voters": [
+          "691931080902574110"
+        ]
+      }
+    ]
   ],
-  "highest_rated": [],
-  "lowest_rated": []
+  "highest_rated": [
+    [
+      "If you could be transformed into any animal for a day, which one would you choose and how would you spend your day?",
+      {
+        "total_score": 16,
+        "vote_count": 2,
+        "voters": [
+          "227768769425047562",
+          "691931080902574110"
+        ]
+      }
+    ],
+    [
+      "If you could have one superpower for a day, what would it be and how would you use it?",
+      {
+        "total_score": 23,
+        "vote_count": 3,
+        "voters": [
+          "227768769425047562",
+          "248075518136549386",
+          "699424739017359420"
+        ]
+      }
+    ],
+    [
+      "What's the most beautiful place you've ever been and what made it so memorable?",
+      {
+        "total_score": 15,
+        "vote_count": 2,
+        "voters": [
+          "227768769425047562",
+          "691931080902574110"
+        ]
+      }
+    ],
+    [
+      "If you could have dinner at any restaurant in the world, where would it be, what would you order, and who would you invite to join you?",
+      {
+        "total_score": 15,
+        "vote_count": 2,
+        "voters": [
+          "691931080902574110",
+          "699424739017359420"
+        ]
+      }
+    ],
+    [
+      "If there was a movie made of your life, who would you want to play your character and why?",
+      {
+        "total_score": 22,
+        "vote_count": 3,
+        "voters": [
+          "691931080902574110",
+          "227768769425047562",
+          "699424739017359420"
+        ]
+      }
+    ],
+    [
+      "If you could create your ideal meal consisting of an appetizer, main course, dessert, and beverage, what would each be and why?",
+      {
+        "total_score": 21,
+        "vote_count": 3,
+        "voters": [
+          "691931080902574110",
+          "227768769425047562",
+          "699424739017359420"
+        ]
+      }
+    ],
+    [
+      "If you could make a rule for a day and everyone had to follow it, what would it be and why?",
+      {
+        "total_score": 7,
+        "vote_count": 1,
+        "voters": [
+          "227768769425047562"
+        ]
+      }
+    ],
+    [
+      "If you could design the perfect mini-vacation for yourself, where would you go, what would you see or do, and why is this your ideal short getaway?",
+      {
+        "total_score": 14,
+        "vote_count": 2,
+        "voters": [
+          "227768769425047562",
+          "699424739017359420"
+        ]
+      }
+    ],
+    [
+      "If you woke up tomorrow with a newfound talent, what would you want that talent to be, how would you make the most out of it, and why did you choose this particular talent?",
+      {
+        "total_score": 20,
+        "vote_count": 3,
+        "voters": [
+          "699424739017359420",
+          "691931080902574110",
+          "227768769425047562"
+        ]
+      }
+    ],
+    [
+      "If you were to pick up a new hobby today that you've never tried before, what might it be and why?",
+      {
+        "total_score": 13,
+        "vote_count": 2,
+        "voters": [
+          "691931080902574110",
+          "227768769425047562"
+        ]
+      }
+    ],
+    [
+      "If you could choose to master an instrument instantly, which one would it be and why?",
+      {
+        "total_score": 12,
+        "vote_count": 2,
+        "voters": [
+          "691931080902574110",
+          "699424739017359420"
+        ]
+      }
+    ],
+    [
+      "If you could travel back in time to witness any single historical event firsthand, what event would you choose and why?",
+      {
+        "total_score": 11,
+        "vote_count": 2,
+        "voters": [
+          "691931080902574110",
+          "699424739017359420"
+        ]
+      }
+    ],
+    [
+      "If you could transform your current home into your dream home, what changes would you make, and why are these changes important to you?",
+      {
+        "total_score": 15,
+        "vote_count": 3,
+        "voters": [
+          "699424739017359420",
+          "691931080902574110",
+          "227768769425047562"
+        ]
+      }
+    ]
+  ],
+  "lowest_rated": [
+    [
+      "If you could transform your everyday commute into an enjoyable experience, how would you change it and what would it involve?",
+      {
+        "total_score": 1,
+        "vote_count": 1,
+        "voters": [
+          "691931080902574110"
+        ]
+      }
+    ],
+    [
+      "If you could integrate one habit from another culture into your daily routine, what would it be and why do you think it would be beneficial for you?",
+      {
+        "total_score": 1,
+        "vote_count": 1,
+        "voters": [
+          "691931080902574110"
+        ]
+      }
+    ],
+    [
+      "If you could spend a day in your favorite painting or photograph, which one would it be and how would you pass your time there?",
+      {
+        "total_score": 1,
+        "vote_count": 1,
+        "voters": [
+          "699424739017359420"
+        ]
+      }
+    ],
+    [
+      "If you could participate in the creation of any famous work of art, what would it be, and in what ways do you think your influence would change the final piece?",
+      {
+        "total_score": 1,
+        "vote_count": 1,
+        "voters": [
+          "699424739017359420"
+        ]
+      }
+    ],
+    [
+      "If you could host a talk show for a day, who would be your dream guest, what interesting questions would you ask, and why did you choose this individual?",
+      {
+        "total_score": 1,
+        "vote_count": 1,
+        "voters": [
+          "699424739017359420"
+        ]
+      }
+    ],
+    [
+      "If you could undertake an extraordinary adventure anywhere in the world, what would it entail and why?",
+      {
+        "total_score": 4,
+        "vote_count": 3,
+        "voters": [
+          "691931080902574110",
+          "227768769425047562",
+          "699424739017359420"
+        ]
+      }
+    ],
+    [
+      "If you could invite any three people, dead or alive, for dinner, who would they be and why?",
+      {
+        "total_score": 2,
+        "vote_count": 1,
+        "voters": [
+          "699424739017359420"
+        ]
+      }
+    ],
+    [
+      "If you could choose one item to represent you, what would that item be and why does it symbolize you?",
+      {
+        "total_score": 2,
+        "vote_count": 1,
+        "voters": [
+          "691931080902574110"
+        ]
+      }
+    ],
+    [
+      "If you had the power to instantly solve a global problem, which problem would you choose to solve and why?",
+      {
+        "total_score": 3,
+        "vote_count": 1,
+        "voters": [
+          "227768769425047562"
+        ]
+      }
+    ],
+    [
+      "If you were asked to create an original board game, what would the theme be, what rules would you set, and what makes it enjoyable and unique?",
+      {
+        "total_score": 6,
+        "vote_count": 2,
+        "voters": [
+          "227768769425047562",
+          "699424739017359420"
+        ]
+      }
+    ],
+    [
+      "If you could design the perfect day from morning until night, what activities would it include, where would it take place, and who would you spend it with?",
+      {
+        "total_score": 3,
+        "vote_count": 1,
+        "voters": [
+          "699424739017359420"
+        ]
+      }
+    ],
+    [
+      "If you were given the chance to invent something new, what would it be and how do you think it would benefit the world?",
+      {
+        "total_score": 10,
+        "vote_count": 3,
+        "voters": [
+          "227768769425047562",
+          "691931080902574110",
+          "699424739017359420"
+        ]
+      }
+    ],
+    [
+      "If you were to write a children's book, what moral or life lesson would you want to impart, and how would you weave it into your story?",
+      {
+        "total_score": 11,
+        "vote_count": 3,
+        "voters": [
+          "699424739017359420",
+          "227768769425047562",
+          "691931080902574110"
+        ]
+      }
+    ],
+    [
+      "If you could experience a day in the life of any fictional character, who would you choose and why?",
+      {
+        "total_score": 9,
+        "vote_count": 2,
+        "voters": [
+          "691931080902574110",
+          "699424739017359420"
+        ]
+      }
+    ]
+  ],
+  "last_qotd_date": null
 }

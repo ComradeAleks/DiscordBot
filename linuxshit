@@ -7,8 +7,8 @@ After=network.target
 [Service]
 Type=simple
 User=pi
-WorkingDirectory=/home/pi/DiscordBot
-ExecStart=/home/pi/DiscordBot/venv/bin/python /home/pi/DiscordBot/bot.py
+WorkingDirectory=/home/comrade/Documents/GitHub/DiscordBot
+ExecStart=/home/comrade/Documents/GitHub/DiscordBot/venv/bin/python /home/comrade/Documents/GitHub/DiscordBot/bot.py
 Restart=always
 RestartSec=10
 Environment=PYTHONUNBUFFERED=1
