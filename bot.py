@@ -28,6 +28,7 @@ class QOTDBot(commands.Bot):
         self.last_qotd_date = None  # Track when we last sent a QOTD
         self.pending_qotd = None  # Store a generated question that couldn't be sent
         self.pending_qotd_date = None  # When the pending question was generated
+        self.style_selector_enabled = True  # Style selector is enabled by default
 
     async def setup_hook(self):
         self.tree.add_command(ping)
@@ -35,6 +36,7 @@ class QOTDBot(commands.Bot):
         self.tree.add_command(rate)
         self.tree.add_command(new)
         self.tree.add_command(ratings)
+        self.tree.add_command(togglestyle)
 
     async def on_disconnect(self):
         logger.warning("Bot disconnected from Discord!")
@@ -419,10 +421,7 @@ async def save_question_data(history, highest_rated=None, lowest_rated=None, las
         if lowest_rated is None:
             lowest_rated = existing_lowest
     
-    # Keep only the last 31 questions
-    if len(history) > 31:
-        history = history[-31:]
-        logger.info(f"Trimmed history to last 31 questions")
+    # No longer trim history - save all questions permanently
     
     # Convert date to string for JSON serialization
     last_qotd_date_str = None
@@ -454,42 +453,117 @@ async def save_last_qotd_date(date):
 async def generate_new_qotd():
     """Generate a new QOTD using ChatGPT."""
     from chatgpt_api import get_chatgpt_response_with_retry
+    import random
     
     history, highest_rated, lowest_rated, _ = await load_question_data()
     
-    # Extract just the question text for recent history
-    recent_questions = [q[0] for q in history[-31:]]
+    # Extract question text with ratings for recent history (last 30)
+    recent_questions_formatted = []
+    for question, rating_data in history[-30:]:
+        if rating_data and rating_data["vote_count"] > 0:
+            avg_rating = rating_data["total_score"] / rating_data["vote_count"]
+            recent_questions_formatted.append(f"{question} (Rating: {avg_rating:.1f}/10)")
+        else:
+            recent_questions_formatted.append(f"{question} (Not rated)")
     
-    prompt = "Your task is to give me a question of the day (QOTD) Follow these rules: "
-    prompt += "1. Each question should be unique, no similar theme. "
-    prompt += "2. All questions should have varying structure and wording and theme. "
-    prompt += "3. Questions should be simple and fun to answer (no economics, no death, no boring things). "
-    prompt += "4. Only reply with the question, nothing else. "
-    prompt += "5. Do not write questions with the same theme or structure AT ALL, as the lower rated questions provided under."
-    prompt += "These are the previous asked questions of the past month: "
-    prompt += "; ".join(recent_questions) + ". "
+    recent_questions = "\n".join(recent_questions_formatted)
     
-    # Add highest rated questions as examples of good formats
-    if highest_rated:
-        high_rated_questions = [q[0] for q in highest_rated[:10]]  # Top 10
-        prompt += "Here are examples of highly rated questions (use these as inspiration for structure and style): "
-        prompt += "; ".join(high_rated_questions) + ". "
+    # Check if bot has style selector enabled
+    # We need to access the bot instance - get it from the running bot
+    bot_instance = None
+    for bot in [b for b in asyncio.all_tasks() if hasattr(b, 'get_coro')]:
+        try:
+            if hasattr(bot.get_coro(), 'cr_frame') and bot.get_coro().cr_frame:
+                for var in bot.get_coro().cr_frame.f_locals.values():
+                    if isinstance(var, QOTDBot):
+                        bot_instance = var
+                        break
+        except:
+            pass
     
-    # Add lowest rated questions as examples to avoid
-    if lowest_rated:
-        low_rated_questions = [q[0] for q in lowest_rated[:10]]  # Bottom 10
-        prompt += "AVOID these question formats and styles (these were poorly rated): "
-        prompt += "; ".join(low_rated_questions) + ". "
+    # Try alternative way to get bot instance
+    if bot_instance is None:
+        import gc
+        for obj in gc.get_objects():
+            if isinstance(obj, QOTDBot):
+                bot_instance = obj
+                break
     
-    prompt += "questions might be rated on a scale from 1 to 10 on how good they are, ask questions more aligning with 8-10 in structure."
+    # Style selector logic
+    style_enabled = bot_instance.style_selector_enabled if bot_instance else True
+    
+    if style_enabled:
+        styles = [
+            "funny", "nostalgic", "weird", "food-related", "social", 
+            "pop-culture", "personal", "random thought", "hypothetical scenario",
+            "preference-based", "sensory (sound, smell, taste)", "childhood memory",
+            "embarrassing moment", "unpopular opinion", "creative"
+        ]
+        chosen_style = random.choice(styles)
+        
+        prompt = f"""
+You are generating a Question of the Day (QOTD) for a Discord community in a {chosen_style} style.
+
+### Goals
+- Be unique, interesting, and quick to answer.
+- Be easy and fun — avoid anything serious, philosophical, or world-changing.
+- Keep it casual and conversational. No "If you could..." repetition.
+- Make sure the question is SHORT and natural to say in chat.
+- Avoid complex multi-part questions ("what, why, and how").
+- Match the {chosen_style} style while staying fun and casual.
+
+### Examples of good QOTD style
+- What's your go-to snack right now?
+- Would you rather never use emojis again or never send GIFs again?
+- What's a smell that instantly makes you happy?
+- What song always puts you in a good mood?
+
+### Examples of bad style
+- If you could change one law in the world, what would it be and why?
+- If you could have dinner with anyone in history, who would it be and why?
+- If you could design the perfect day, what would it include and why?
+
+### Recent questions to avoid repeating ideas from:
+{recent_questions}
+
+### Output format
+Respond with only one question, nothing else.
+Make it short, casual, and conversational.
+"""
+    else:
+        prompt = f"""
+You are generating a Question of the Day (QOTD) for a Discord community.
+
+### Goals
+- Be unique, interesting, and quick to answer.
+- Be easy and fun — avoid anything serious, philosophical, or world-changing.
+- Keep it casual and conversational. No "If you could..." or other similar question repetitions.
+- Make sure the question is SHORT and natural to say in chat.
+- Avoid complex multi-part questions ("what, why, and how").
+
+### Examples of good QOTD style
+- What's your go-to snack right now?
+- Would you rather never use emojis again or never send GIFs again?
+- What's a smell that instantly makes you happy?
+- What song always puts you in a good mood?
+
+### Examples of bad style
+- If you could change one law in the world, what would it be and why?
+- If you could have dinner with anyone in history, who would it be and why?
+- If you could design the perfect day, what would it include and why?
+
+### Recent questions to avoid repeating ideas from:
+{recent_questions}
+
+### Output format
+Respond with only one question, nothing else.
+Make it short, casual, and conversational.
+"""
     
     response = await get_chatgpt_response_with_retry(prompt)
     
     # Add new question to history with no rating data initially
     history.append([response, None])
-    
-    # AFTER adding the new question: Update highest/lowest lists with the previously asked question
-    highest_rated, lowest_rated = update_rating_lists_on_new_question(history, highest_rated, lowest_rated)
     
     # Save the updated data
     history = await save_question_data(history, highest_rated, lowest_rated)
@@ -681,6 +755,35 @@ async def ratings(interaction: discord.Interaction):
         logger.error(f"Error in ratings command: {e}")
         try:
             await interaction.followup.send("Sorry, I'm having trouble retrieving the ratings right now. Please try again later.")
+        except:
+            logger.error("Failed to send error message to user")
+
+@discord.app_commands.command(name="togglestyle", description="Toggle style selector on/off (Comrade only)")
+async def togglestyle(interaction: discord.Interaction):
+    await interaction.response.defer()
+    bot = interaction.client
+    
+    try:
+        # Check if user has the "Comrade" role
+        comrade_role_id = 536303389764485130
+        user_role_ids = [role.id for role in interaction.user.roles]
+        
+        if comrade_role_id not in user_role_ids:
+            await interaction.followup.send("❌ You don't have permission to use this command. Only users with the 'Comrade' role can toggle the style selector.")
+            logger.warning(f"User {interaction.user.display_name} ({interaction.user.id}) attempted to use /togglestyle without Comrade role")
+            return
+        
+        # Toggle the style selector
+        bot.style_selector_enabled = not bot.style_selector_enabled
+        
+        status = "enabled ✅" if bot.style_selector_enabled else "disabled ❌"
+        await interaction.followup.send(f"Style selector is now **{status}**")
+        logger.info(f"Comrade {interaction.user.display_name} toggled style selector to: {bot.style_selector_enabled}")
+        
+    except Exception as e:
+        logger.error(f"Error in togglestyle command: {e}")
+        try:
+            await interaction.followup.send("Sorry, I'm having trouble toggling the style selector right now. Please try again later.")
         except:
             logger.error("Failed to send error message to user")
         
