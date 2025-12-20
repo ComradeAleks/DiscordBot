@@ -22,7 +22,7 @@ async def get_chatgpt_response_with_retry(prompt, max_retries=None):
     Will retry forever if max_retries is None.
     """
     retry_count = 0
-    current_model = "gpt-5-turbo"
+    current_model = "gpt-5.1"
     fallback_used = False
     
     while True:

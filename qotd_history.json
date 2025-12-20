@@ -331,6 +331,10 @@
     [
       "Ever had a disagreement with a pet or an animal? What was it about?",
       -5
+    ],
+    [
+      "What’s a super popular snack or food that you just don’t get the hype for at all?",
+      null
     ]
   ],
   "highest_rated": [],
