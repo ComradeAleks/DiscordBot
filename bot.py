@@ -29,11 +29,11 @@ class QOTDBot(commands.Bot):
         self.pending_qotd = None  # Store a generated question that couldn't be sent
         self.pending_qotd_date = None  # When the pending question was generated
         self.style_selector_enabled = True  # Style selector is enabled by default
+        self.last_qotd_messages = []  # Store message objects for reaction tracking
 
     async def setup_hook(self):
         self.tree.add_command(ping)
         self.tree.add_command(repeat)
-        self.tree.add_command(rate)
         self.tree.add_command(new)
         self.tree.add_command(ratings)
         self.tree.add_command(togglestyle)
@@ -64,12 +64,16 @@ async def check_pending_qotd(bot):
             if days_old <= 1:
                 logger.info(f"Found pending QOTD from {bot.pending_qotd_date} - attempting to send now")
                 
+                bot.last_qotd_messages = []
                 success_count = 0
                 for guild in bot.guilds:
                     channel = discord.utils.get(guild.text_channels, name="❓qotd")
                     if channel:
                         try:
-                            await send_message_with_retry(channel, bot.pending_qotd)
+                            message = await channel.send(bot.pending_qotd)
+                            await message.add_reaction("👍")
+                            await message.add_reaction("👎")
+                            bot.last_qotd_messages.append(message)
                             success_count += 1
                         except Exception as e:
                             logger.error(f"Failed to send pending QOTD to #{channel.name}: {e}")
@@ -105,12 +109,16 @@ async def check_pending_qotd(bot):
                     # Generate a new question
                     response = await generate_new_qotd()
                     
+                    bot.last_qotd_messages = []
                     success_count = 0
                     for guild in bot.guilds:
                         channel = discord.utils.get(guild.text_channels, name="❓qotd")
                         if channel:
                             try:
-                                await send_message_with_retry(channel, response)
+                                message = await channel.send(response)
+                                await message.add_reaction("👍")
+                                await message.add_reaction("👎")
+                                bot.last_qotd_messages.append(message)
                                 success_count += 1
                             except Exception as e:
                                 logger.error(f"Failed to send makeup QOTD to #{channel.name}: {e}")
@@ -190,14 +198,23 @@ async def send_qotd(bot):
         
         bot.last_qotd = response
         
+        # Clear previous message references
+        bot.last_qotd_messages = []
+        
         # Send to all guilds - but fail fast if there are connection issues
         success_count = 0
         for guild in bot.guilds:
             channel = discord.utils.get(guild.text_channels, name="❓qotd")
             if channel:
                 try:
-                    await send_message_with_retry(channel, response)
+                    message = await channel.send(response)
+                    # Add upvote and downvote reactions
+                    await message.add_reaction("👍")
+                    await message.add_reaction("👎")
+                    # Store message for later reaction counting
+                    bot.last_qotd_messages.append(message)
                     success_count += 1
+                    logger.info(f"Message sent successfully to #{channel.name}")
                 except Exception as e:
                     logger.error(f"Failed to send QOTD to #{channel.name} in {guild.name}: {e}")
                     # Store the question as pending since it couldn't be sent
@@ -249,11 +266,11 @@ async def load_question_data():
     """
     Load question history and rating data from JSON file.
     
-    New data structure:
-    - history: List of [question, rating_metadata] pairs
-        Format: [["Question text", {"total_score": 15, "vote_count": 2, "voters": ["user1", "user2"]}]]
-    - highest_rated: List of top-rated questions (rating >= 5.0) - max 15
-    - lowest_rated: List of low-rated questions (rating < 5.0) - max 15
+    Data structure:
+    - history: List of [question, reaction_score] pairs
+        Format: [["Question text", 5]] where score = upvotes - downvotes - 1
+    - highest_rated: List of top-rated questions (score >= 0) - max 15
+    - lowest_rated: List of low-rated questions (score < 0) - max 15
     - last_qotd_date: Date when the last QOTD was sent (for startup checks)
     """
     import json
@@ -266,32 +283,20 @@ async def load_question_data():
         with open(history_path, "r", encoding="utf-8") as f:
             data = json.load(f)
             if isinstance(data, dict):
-                # Check if we have old format and need to convert
-                if "rating_data" in data:
-                    # Convert from old format to new format
-                    history = convert_old_format_to_new(data.get("history", []), data.get("rating_data", {}))
-                    highest_rated = data.get("highest_rated", [])
-                    lowest_rated = data.get("lowest_rated", [])
-                    # Convert string-based lists to new format too
-                    highest_rated = convert_rating_lists_to_new_format(highest_rated)
-                    lowest_rated = convert_rating_lists_to_new_format(lowest_rated)
-                    # No last_qotd_date in old format
-                    last_qotd_date = None
-                else:
-                    # New format
-                    history = data.get("history", [])
-                    highest_rated = data.get("highest_rated", [])
-                    lowest_rated = data.get("lowest_rated", [])
-                    # Load last QOTD date and convert from string to date object
-                    last_qotd_date_str = data.get("last_qotd_date")
-                    if last_qotd_date_str:
-                        try:
-                            last_qotd_date = datetime.datetime.fromisoformat(last_qotd_date_str).date()
-                        except (ValueError, TypeError):
-                            logger.warning(f"Invalid last_qotd_date format: {last_qotd_date_str}")
-                            last_qotd_date = None
+                # Load data
+                history = data.get("history", [])
+                highest_rated = data.get("highest_rated", [])
+                lowest_rated = data.get("lowest_rated", [])
+                # Load last QOTD date and convert from string to date object
+                last_qotd_date_str = data.get("last_qotd_date")
+                if last_qotd_date_str:
+                    try:
+                        last_qotd_date = datetime.datetime.fromisoformat(last_qotd_date_str).date()
+                    except (ValueError, TypeError):
+                        logger.warning(f"Invalid last_qotd_date format: {last_qotd_date_str}")
+                        last_qotd_date = None
             else:
-                # Very old format - just a list
+                # Old format - just a list
                 history = [[q, None] for q in (data if isinstance(data, list) else [])]
                 highest_rated = []
                 lowest_rated = []
@@ -304,64 +309,22 @@ async def load_question_data():
     
     return history, highest_rated, lowest_rated, last_qotd_date
 
-def convert_old_format_to_new(old_history, old_rating_data):
-    """Convert old separate history and rating_data to new combined format."""
-    import re
-    new_history = []
-    rating_pattern = r" Rated: [\d.]+(?:/10)?"
+def update_rating_lists(history, highest_rated, lowest_rated):
+    """Update highest/lowest rated lists based on reaction scores."""
+    if not history:
+        return highest_rated, lowest_rated
     
-    for i, question in enumerate(old_history):
-        # Remove rating text to get clean question
-        clean_question = re.sub(rating_pattern, "", question)
-        
-        # Get rating data if it exists
-        rating_metadata = old_rating_data.get(str(i))
-        
-        new_history.append([clean_question, rating_metadata])
+    # Get the last rated question
+    last_question, last_score = history[-1]
     
-    return new_history
-
-def convert_rating_lists_to_new_format(old_list):
-    """Convert old string-based rating lists to new format."""
-    import re
-    new_list = []
-    
-    for item in old_list:
-        if isinstance(item, str):
-            # Extract question and rating info from string like "Question (Rating: 7.5/10, 2 votes)"
-            match = re.match(r"(.+) \(Rating: ([\d.]+)/10, (\d+) votes?\)", item)
-            if match:
-                question = match.group(1)
-                rating = float(match.group(2))
-                votes = int(match.group(3))
-                
-                # Create rating metadata
-                rating_metadata = {
-                    "total_score": int(rating * votes),
-                    "vote_count": votes,
-                    "voters": []  # We can't recover voter IDs from old format
-                }
-                
-                new_list.append([question, rating_metadata])
-    
-    return new_list
-
-def update_rating_lists_on_new_question(history, highest_rated, lowest_rated):
-    """Update highest/lowest rated lists when a new question is generated (not when rating)."""
-    if len(history) < 2:
-        return highest_rated, lowest_rated  # Need at least 2 questions (previous + new)
-    
-    # Get the PREVIOUSLY asked question (second to last, since last is the new unrated question)
-    previous_question, previous_rating = history[-2]
-    
-    # If the previous question has no rating data, do nothing
-    if not previous_rating or previous_rating["vote_count"] < 1:
+    # If the last question has no score, do nothing
+    if last_score is None:
         return highest_rated, lowest_rated
     
     # Check if this question is already in either list
     question_already_in_lists = False
     for q, _ in highest_rated + lowest_rated:
-        if q == previous_question:
+        if q == last_question:
             question_already_in_lists = True
             break
     
@@ -369,41 +332,37 @@ def update_rating_lists_on_new_question(history, highest_rated, lowest_rated):
     if question_already_in_lists:
         return highest_rated, lowest_rated
     
-    average_rating = previous_rating["total_score"] / previous_rating["vote_count"]
-    
-    # Check if it should go in highest_rated (>= 5.0)
-    if average_rating >= 5.0:
-        # Add to highest_rated if list isn't full or if this rating is higher than the lowest in the list
+    # Check if it should go in highest_rated (score >= 0)
+    if last_score >= 0:
+        # Add to highest_rated if list isn't full or if this score is higher than the lowest in the list
         if len(highest_rated) < 15:
-            highest_rated.append([previous_question, previous_rating])
+            highest_rated.append([last_question, last_score])
         else:
-            # Find the lowest rating in highest_rated
-            lowest_in_highest = min(highest_rated, key=lambda x: x[1]["total_score"] / x[1]["vote_count"])
-            lowest_rating = lowest_in_highest[1]["total_score"] / lowest_in_highest[1]["vote_count"]
+            # Find the lowest score in highest_rated
+            lowest_in_highest = min(highest_rated, key=lambda x: x[1])
             
-            if average_rating > lowest_rating:
+            if last_score > lowest_in_highest[1]:
                 highest_rated.remove(lowest_in_highest)
-                highest_rated.append([previous_question, previous_rating])
+                highest_rated.append([last_question, last_score])
     
-    # Check if it should go in lowest_rated (< 5.0)
-    elif average_rating < 5.0:
-        # Add to lowest_rated if list isn't full or if this rating is lower than the highest in the list
+    # Check if it should go in lowest_rated (score < 0)
+    else:
+        # Add to lowest_rated if list isn't full or if this score is lower than the highest in the list
         if len(lowest_rated) < 15:
-            lowest_rated.append([previous_question, previous_rating])
+            lowest_rated.append([last_question, last_score])
         else:
-            # Find the highest rating in lowest_rated
-            highest_in_lowest = max(lowest_rated, key=lambda x: x[1]["total_score"] / x[1]["vote_count"])
-            highest_rating = highest_in_lowest[1]["total_score"] / highest_in_lowest[1]["vote_count"]
+            # Find the highest score in lowest_rated
+            highest_in_lowest = max(lowest_rated, key=lambda x: x[1])
             
-            if average_rating < highest_rating:
+            if last_score < highest_in_lowest[1]:
                 lowest_rated.remove(highest_in_lowest)
-                lowest_rated.append([previous_question, previous_rating])
+                lowest_rated.append([last_question, last_score])
     
     # Sort the lists
-    highest_rated.sort(key=lambda x: x[1]["total_score"] / x[1]["vote_count"], reverse=True)
-    lowest_rated.sort(key=lambda x: x[1]["total_score"] / x[1]["vote_count"])
+    highest_rated.sort(key=lambda x: x[1], reverse=True)
+    lowest_rated.sort(key=lambda x: x[1])
     
-    logger.info(f"Added previous question to rating lists: '{previous_question[:50]}...' with rating {average_rating:.1f}")
+    logger.info(f"Added question to rating lists: '{last_question[:50]}...' with score {last_score:+d}")
     
     return highest_rated, lowest_rated
 
@@ -454,15 +413,52 @@ async def generate_new_qotd():
     """Generate a new QOTD using ChatGPT."""
     from chatgpt_api import get_chatgpt_response_with_retry
     import random
+    import gc
     
     history, highest_rated, lowest_rated, _ = await load_question_data()
     
+    # Calculate reaction score for the last question before generating a new one
+    bot_instance = None
+    for obj in gc.get_objects():
+        if isinstance(obj, QOTDBot):
+            bot_instance = obj
+            break
+    
+    if bot_instance and bot_instance.last_qotd_messages and len(history) > 0:
+        # Count reactions on the last question
+        total_upvotes = 0
+        total_downvotes = 0
+        
+        for message in bot_instance.last_qotd_messages:
+            try:
+                # Refresh message to get current reactions
+                message = await message.channel.fetch_message(message.id)
+                for reaction in message.reactions:
+                    if str(reaction.emoji) == "👍":
+                        # Subtract 1 because bot reacted too
+                        total_upvotes += max(0, reaction.count - 1)
+                    elif str(reaction.emoji) == "👎":
+                        # Subtract 1 because bot reacted too
+                        total_downvotes += max(0, reaction.count - 1)
+            except Exception as e:
+                logger.error(f"Failed to fetch reactions: {e}")
+        
+        # Calculate score: upvotes - downvotes - 1
+        reaction_score = total_upvotes - total_downvotes - 1
+        
+        # Update the last question's rating
+        if history:
+            history[-1][1] = reaction_score
+            logger.info(f"Updated last question rating: {reaction_score} (👍{total_upvotes} - 👎{total_downvotes} - 1)")
+            
+            # Update highest/lowest rated lists
+            highest_rated, lowest_rated = update_rating_lists(history, highest_rated, lowest_rated)
+    
     # Extract question text with ratings for recent history (last 30)
     recent_questions_formatted = []
-    for question, rating_data in history[-30:]:
-        if rating_data and rating_data["vote_count"] > 0:
-            avg_rating = rating_data["total_score"] / rating_data["vote_count"]
-            recent_questions_formatted.append(f"{question} (Rating: {avg_rating:.1f}/10)")
+    for question, rating_score in history[-30:]:
+        if rating_score is not None:
+            recent_questions_formatted.append(f"{question} (Score: {rating_score:+d})")
         else:
             recent_questions_formatted.append(f"{question} (Not rated)")
     
@@ -511,6 +507,7 @@ You are generating a Question of the Day (QOTD) for a Discord community in a {ch
 - Make sure the question is not too long and natural to say in chat.
 - Avoid complex multi-part questions ("what, why, and how").
 - Match the {chosen_style} style while staying fun and casual.
+- Don’t assume the user owns anything, goes anywhere, or has specific life experiences.
 
 ### Examples of good QOTD style
 - What's your go-to snack right now?
@@ -532,6 +529,9 @@ Mix up your question structures to keep things fresh and interesting.
 ### Output format
 Respond with only one question, nothing else.
 Make it not too long, casual, and conversational.
+
+### Final self-check
+Before finalizing, check: “does this question make logical sense? and does it adhere to all the rules above?”
 """
     else:
         prompt = f"""
@@ -543,6 +543,7 @@ You are generating a Question of the Day (QOTD) for a Discord community.
 - Keep it casual and conversational. No "If you could..." or other similar question repetitions.
 - Make sure the question is not too long and natural to say in chat.
 - Avoid complex multi-part questions ("what, why, and how").
+- Don’t assume the user owns anything, goes anywhere, or has specific life experiences.
 
 ### Examples of good QOTD style
 - What's your go-to snack right now?
@@ -564,6 +565,9 @@ Mix up your question structures to keep things fresh and interesting.
 ### Output format
 Respond with only one question, nothing else.
 Make it not too long, casual, and conversational.
+
+### Final self-check
+Before finalizing, check: “does this question make logical sense? and does it adhere to all the rules above?”
 """
     
     response = await get_chatgpt_response_with_retry(prompt)
@@ -620,6 +624,9 @@ async def new(interaction: discord.Interaction):
         response = await generate_new_qotd()
         bot.last_qotd = response
         
+        # Clear previous message references
+        bot.last_qotd_messages = []
+        
         # Send the new question to the current channel
         await interaction.followup.send(f"🎯 **New Question of the Day:**\n{response}")
         
@@ -629,7 +636,15 @@ async def new(interaction: discord.Interaction):
         for guild in bot.guilds:
             channel = discord.utils.get(guild.text_channels, name="❓qotd")
             if channel and channel.id != interaction.channel_id:  # Don't send to the same channel twice
-                await send_message_with_retry(channel, response)
+                try:
+                    message = await channel.send(response)
+                    # Add reactions
+                    await message.add_reaction("👍")
+                    await message.add_reaction("👎")
+                    # Store message for later reaction counting
+                    bot.last_qotd_messages.append(message)
+                except Exception as e:
+                    logger.error(f"Failed to send to #{channel.name}: {e}")
         
         logger.info(f"New QOTD generated and sent by Comrade {interaction.user.display_name}")
         
@@ -637,88 +652,6 @@ async def new(interaction: discord.Interaction):
         logger.error(f"Error in new command: {e}")
         try:
             await interaction.followup.send("Sorry, I'm having trouble generating a new question right now. Please try again later.")
-        except:
-            logger.error("Failed to send error message to user")
-
-@discord.app_commands.command(name="rate", description="Rate the last QOTD with a number from 1-10")
-@discord.app_commands.describe(rating="Rating from 1 to 10 for the last QOTD")
-async def rate(interaction: discord.Interaction, rating: int):
-    await interaction.response.defer()
-    bot = interaction.client
-    
-    try:
-        # Validate rating range
-        if rating < 1 or rating > 10:
-            await interaction.followup.send("Please provide a rating between 1 and 10.")
-            return
-            
-        if not hasattr(bot, 'last_qotd') or not bot.last_qotd:
-            await interaction.followup.send("No question has been posted yet to rate!")
-            return
-            
-        import json
-        import re
-        
-        logger.info(f"User {interaction.user.display_name} rating QOTD with {rating}")
-        
-        # Load question data using shared function
-        history, highest_rated, lowest_rated, _ = await load_question_data()
-            
-        if not history:
-            await interaction.followup.send("No questions in history to rate!")
-            return
-            
-        # Get the last question
-        last_question, last_rating = history[-1]
-        
-        # Initialize rating data if it doesn't exist
-        if last_rating is None:
-            last_rating = {
-                "total_score": 0,
-                "vote_count": 0,
-                "voters": []
-            }
-        
-        # Check if this user has already voted
-        user_id = str(interaction.user.id)
-        if user_id in last_rating["voters"]:
-            await interaction.followup.send("You have already rated this question! Each person can only rate once.")
-            return
-        
-        # Add the new rating
-        last_rating["total_score"] += rating
-        last_rating["vote_count"] += 1
-        last_rating["voters"].append(user_id)
-        
-        # Update the question in history
-        history[-1] = [last_question, last_rating]
-        
-        # Calculate average for display
-        average_rating = last_rating["total_score"] / last_rating["vote_count"]
-        vote_count = last_rating["vote_count"]
-        
-        # Save updated history
-        await save_question_data(history, highest_rated, lowest_rated)
-        
-        # Update bot's last question with rating display
-        if vote_count == 1:
-            display_question = f"{last_question} Rated: {rating}/10"
-        else:
-            display_question = f"{last_question} Rated: {average_rating:.1f}/10"
-        
-        bot.last_qotd = display_question
-            
-        if vote_count == 1:
-            await interaction.followup.send(f"Thank you for rating! You gave this question a {rating}/10")
-        else:
-            await interaction.followup.send(f"Thank you for rating! You gave this question a {rating}/10. The average is now {average_rating:.1f}/10 ({vote_count} votes)")
-            
-        logger.info(f"QOTD rating updated successfully - New average: {average_rating:.1f} from {vote_count} votes")
-        
-    except Exception as e:
-        logger.error(f"Error in rate command: {e}")
-        try:
-            await interaction.followup.send("Sorry, I'm having trouble processing your rating right now. Please try again later.")
         except:
             logger.error("Failed to send error message to user")
 
@@ -735,9 +668,8 @@ async def ratings(interaction: discord.Interaction):
         # Add highest rated questions
         if highest_rated:
             highest_text = ""
-            for i, (question, rating_data) in enumerate(highest_rated[:10]):
-                avg_rating = rating_data["total_score"] / rating_data["vote_count"]
-                highest_text += f"{i+1}. {question} (Rating: {avg_rating:.1f}/10, {rating_data['vote_count']} votes)\n"
+            for i, (question, score) in enumerate(highest_rated[:10]):
+                highest_text += f"{i+1}. {question} (Score: {score:+d})\n"
             embed.add_field(name="🔥 Top Rated Questions", value=highest_text[:1024], inline=False)
         else:
             embed.add_field(name="🔥 Top Rated Questions", value="No rated questions yet", inline=False)
@@ -745,14 +677,13 @@ async def ratings(interaction: discord.Interaction):
         # Add lowest rated questions
         if lowest_rated:
             lowest_text = ""
-            for i, (question, rating_data) in enumerate(lowest_rated[:10]):
-                avg_rating = rating_data["total_score"] / rating_data["vote_count"]
-                lowest_text += f"{i+1}. {question} (Rating: {avg_rating:.1f}/10, {rating_data['vote_count']} votes)\n"
+            for i, (question, score) in enumerate(lowest_rated[:10]):
+                lowest_text += f"{i+1}. {question} (Score: {score:+d})\n"
             embed.add_field(name="👎 Lowest Rated Questions", value=lowest_text[:1024], inline=False)
         else:
             embed.add_field(name="👎 Lowest Rated Questions", value="No rated questions yet", inline=False)
         
-        embed.set_footer(text="All questions with at least 1 vote are included in these lists")
+        embed.set_footer(text="Scores = (👍 upvotes - 👎 downvotes - 1). Higher is better!")
         
         await interaction.followup.send(embed=embed)
         logger.info("Ratings list displayed successfully")
