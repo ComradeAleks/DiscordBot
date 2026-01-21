@@ -37,6 +37,8 @@ class QOTDBot(commands.Bot):
         self.tree.add_command(new)
         self.tree.add_command(ratings)
         self.tree.add_command(togglestyle)
+        self.tree.add_command(addmovie)
+        self.tree.add_command(choosemovie)
 
     async def on_disconnect(self):
         logger.warning("Bot disconnected from Discord!")
@@ -409,6 +411,26 @@ async def save_last_qotd_date(date):
     except Exception as e:
         logger.error(f"Failed to save last QOTD date: {e}")
 
+async def load_movie_data():
+    """Load movie list from JSON file."""
+    import json
+    movie_path = os.path.join(os.path.dirname(__file__), "movie_list.json")
+    
+    if os.path.exists(movie_path):
+        with open(movie_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            return data.get("movies", [])
+    else:
+        return []
+
+async def save_movie_data(movies):
+    """Save movie list to JSON file."""
+    import json
+    movie_path = os.path.join(os.path.dirname(__file__), "movie_list.json")
+    
+    with open(movie_path, "w", encoding="utf-8") as f:
+        json.dump({"movies": movies}, f, ensure_ascii=False, indent=2)
+
 async def generate_new_qotd():
     """Generate a new QOTD using ChatGPT."""
     from chatgpt_api import get_chatgpt_response_with_retry
@@ -580,6 +602,48 @@ Before finalizing, check: “does this question make logical sense? and does it 
     
     return response
 
+async def choose_random_movie(bot):
+    """Choose a random movie from the list and post it to movie-night channels."""
+    try:
+        import random
+        
+        # Load movie list
+        movies = await load_movie_data()
+        
+        if not movies:
+            logger.info("No movies in the list to choose from")
+            # Send message to movie-night channels that there are no movies
+            for guild in bot.guilds:
+                channel = discord.utils.get(guild.text_channels, name="movie-night")
+                if channel:
+                    try:
+                        await channel.send("🎬 It's movie night time! But there are no movies in the list. Add some with `/addmovie`!")
+                    except Exception as e:
+                        logger.error(f"Failed to send no-movies message to #{channel.name}: {e}")
+            return
+        
+        # Choose random movie
+        chosen_movie = random.choice(movies)
+        
+        # Remove from list
+        movies.remove(chosen_movie)
+        await save_movie_data(movies)
+        
+        # Send to all movie-night channels
+        for guild in bot.guilds:
+            channel = discord.utils.get(guild.text_channels, name="movie-night")
+            if channel:
+                try:
+                    await channel.send(f"🎬 **Tonight's Movie:** {chosen_movie}\n\n🍿 Enjoy the show!")
+                    logger.info(f"Sent movie choice '{chosen_movie}' to #{channel.name}")
+                except Exception as e:
+                    logger.error(f"Failed to send movie choice to #{channel.name}: {e}")
+        
+        logger.info(f"Chose movie: {chosen_movie}. {len(movies)} movies remaining in list.")
+        
+    except Exception as e:
+        logger.error(f"Error in choose_random_movie: {e}")
+
 @discord.app_commands.command(name="ping", description="Replies with Pong!")
 async def ping(interaction: discord.Interaction):
     await interaction.response.send_message("Pong!")
@@ -723,6 +787,77 @@ async def togglestyle(interaction: discord.Interaction):
             await interaction.followup.send("Sorry, I'm having trouble toggling the style selector right now. Please try again later.")
         except:
             logger.error("Failed to send error message to user")
+
+@discord.app_commands.command(name="addmovie", description="Add a movie to the movie night list")
+@discord.app_commands.describe(movie="The name of the movie to add")
+async def addmovie(interaction: discord.Interaction, movie: str):
+    await interaction.response.defer()
+    
+    try:
+        # Check if command is used in movie-night channel
+        if not hasattr(interaction.channel, 'name') or interaction.channel.name != "movie-night":
+            await interaction.followup.send("❌ This command can only be used in the #movie-night channel.")
+            logger.warning(f"User {interaction.user.display_name} attempted to use /addmovie outside movie-night channel")
+            return
+        
+        # Load current movie list
+        movies = await load_movie_data()
+        
+        # Check if movie already exists (case-insensitive)
+        if any(m.lower() == movie.lower() for m in movies):
+            await interaction.followup.send(f"❌ '{movie}' is already in the list!")
+            return
+        
+        # Add movie to list
+        movies.append(movie)
+        await save_movie_data(movies)
+        
+        await interaction.followup.send(f"✅ Added '{movie}' to the movie list! ({len(movies)} movies total)")
+        logger.info(f"User {interaction.user.display_name} added movie: {movie}")
+        
+    except Exception as e:
+        logger.error(f"Error in addmovie command: {e}")
+        try:
+            await interaction.followup.send("Sorry, I'm having trouble adding the movie right now. Please try again later.")
+        except:
+            logger.error("Failed to send error message to user")
+
+@discord.app_commands.command(name="choosemovie", description="Choose a random movie from the list")
+async def choosemovie(interaction: discord.Interaction):
+    await interaction.response.defer()
+    
+    try:
+        # Check if command is used in movie-night channel
+        if not hasattr(interaction.channel, 'name') or interaction.channel.name != "movie-night":
+            await interaction.followup.send("❌ This command can only be used in the #movie-night channel.")
+            logger.warning(f"User {interaction.user.display_name} attempted to use /choosemovie outside movie-night channel")
+            return
+        
+        import random
+        
+        # Load movie list
+        movies = await load_movie_data()
+        
+        if not movies:
+            await interaction.followup.send("❌ The movie list is empty! Add some movies with `/addmovie` first.")
+            return
+        
+        # Choose random movie
+        chosen_movie = random.choice(movies)
+        
+        # Remove from list
+        movies.remove(chosen_movie)
+        await save_movie_data(movies)
+        
+        await interaction.followup.send(f"🎬 **Tonight's Movie:** {chosen_movie}\n\n🍿 Enjoy the show!\n\n({len(movies)} movies remaining in list)")
+        logger.info(f"User {interaction.user.display_name} chose movie: {chosen_movie}")
+        
+    except Exception as e:
+        logger.error(f"Error in choosemovie command: {e}")
+        try:
+            await interaction.followup.send("Sorry, I'm having trouble choosing a movie right now. Please try again later.")
+        except:
+            logger.error("Failed to send error message to user")
         
 bot = QOTDBot()
 
@@ -749,10 +884,13 @@ async def on_ready():
     # Only start scheduler once, and don't restart on reconnections
     if not bot.scheduler_started:
         scheduler = AsyncIOScheduler(timezone=pytz.timezone('Europe/Oslo'))
+        # Daily QOTD at 12:00 PM CET
         scheduler.add_job(send_qotd, CronTrigger(hour=12, minute=0), args=[bot])
+        # Movie night every Friday at 12:00 PM CET
+        scheduler.add_job(choose_random_movie, CronTrigger(day_of_week='fri', hour=12, minute=0), args=[bot])
         scheduler.start()
         bot.scheduler_started = True
-        logger.info("Scheduler started successfully")
+        logger.info("Scheduler started successfully (QOTD daily + Movie night Fridays)")
     else:
         logger.info("Scheduler already running - not restarting")
     
