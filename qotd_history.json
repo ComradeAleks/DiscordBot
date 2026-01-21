@@ -335,9 +335,227 @@
     [
       "What’s a super popular snack or food that you just don’t get the hype for at all?",
       null
+    ],
+    [
+      "Is there a sound from your childhood (like an old ringtone, startup noise, or toy jingle) that would instantly take you back if you heard it today?",
+      -1
+    ],
+    [
+      "What’s a tiny, harmless lie you told as a kid that still randomly makes you cringe when you remember it?",
+      -1
+    ],
+    [
+      "What’s a super popular hobby or trend that everyone seems obsessed with, but you secretly think looks kinda boring?",
+      2
+    ],
+    [
+      "You open your streaming app and it only lets you play one song on repeat all day—what are you putting on?",
+      -1
+    ],
+    [
+      "You get a free “skip” on one boring life task for a whole year—what are you choosing to never do?",
+      1
+    ],
+    [
+      "You wake up with the power to make one everyday object play a funny sound effect every time it’s used—what are you picking and what sound does it make?",
+      0
+    ],
+    [
+      "What’s a tiny, completely harmless thing you did years ago that still makes you randomly cringe in the shower?",
+      null
+    ],
+    [
+      "A genie appears but can only grant super boring powers—what hilariously lame “superpower” are you taking anyway?",
+      1
+    ],
+    [
+      "You ever confidently waved back at someone who actually wasn’t waving at you—how did you play it off?",
+      -2
+    ],
+    [
+      "What’s a super popular show or movie that everyone swears is amazing, but you secretly found kinda meh or couldn’t even finish?",
+      -1
+    ],
+    [
+      "You’re handed the aux cord in a car full of people you barely know—what song are you risking it all with first?",
+      0
+    ],
+    [
+      "You open your phone and the app store only has space for three apps total—what’s staying on your home screen?",
+      0
+    ],
+    [
+      "You suddenly gain the ability to talk to one type of household object—what are you chatting with, and what are you asking it first?",
+      -2
+    ],
+    [
+      "You wake up and your bed has a “teleport” button that sends you somewhere comfy but not dangerous—where are you tapping to go first thing in the morning?",
+      -2
+    ],
+    [
+      "What’s a tiny, ridiculous thing you once did to impress someone that still makes you want to disappear when you remember it?",
+      -4
+    ],
+    [
+      "You open your messages and see a wildly out-of-context text from someone—what does it say?",
+      -5
+    ],
+    [
+      "You magically get every item from one shop for free for a day, but it can’t be a tech or clothing store—what kind of place are you raiding?",
+      1
+    ],
+    [
+      "You suddenly become a master chef but only for one super specific food—what ridiculously random thing are you now famous for making?",
+      null
+    ],
+    [
+      "You get to instantly delete one super mildly annoying thing from everyday life (nothing serious, just tiny stuff)—what are you wiping off the face of the earth?",
+      null
+    ],
+    [
+      "What super hyped mobile game did you try for 10 minutes and instantly decide “yeah, this ain’t it”?",
+      0
+    ],
+    [
+      "What’s something small or silly from “back then” (a toy, song, game, website, anything) that randomly pops into your head and makes you weirdly happy?",
+      null
+    ],
+    [
+      "You open a game and the character creator is weirdly detailed—what’s the first thing you always spend way too long customizing?",
+      -2
+    ],
+    [
+      "You get an instant 10/10 skill in something completely useless in real life—what dumb talent are you flexing?",
+      null
+    ],
+    [
+      "Back when you were a kid, what super random object or spot felt “magical” to you for no real reason at all?",
+      1
+    ],
+    [
+      "You open your fridge and everything inside has turned into one single food item (same thing in every container) — what food are you now stuck with?",
+      1
+    ],
+    [
+      "What’s a super popular emoji you secretly think is overrated or low‑key annoying?",
+      null
+    ],
+    [
+      "You’re suddenly the main character of a video game based on your everyday life—what kind of game is it and what’s your special move called?",
+      -1
+    ],
+    [
+      "What’s a minor social fail you keep doing on loop, like saying “you too” to the cashier who just told you to enjoy your meal?",
+      0
+    ],
+    [
+      "What’s a minor outfit or hair disaster you didn’t notice all day until someone finally pointed it out?",
+      1
+    ],
+    [
+      "What’s a super popular drink (any kind) that you quietly think tastes kinda bad?",
+      null
+    ],
+    [
+      "You open your phone and every app icon has turned into a random food— which one are you tapping first, and what food is it now?",
+      null
     ]
   ],
-  "highest_rated": [],
-  "lowest_rated": [],
-  "last_qotd_date": "2025-12-20"
+  "highest_rated": [
+    [
+      "What’s a super popular hobby or trend that everyone seems obsessed with, but you secretly think looks kinda boring?",
+      2
+    ],
+    [
+      "You get a free “skip” on one boring life task for a whole year—what are you choosing to never do?",
+      1
+    ],
+    [
+      "A genie appears but can only grant super boring powers—what hilariously lame “superpower” are you taking anyway?",
+      1
+    ],
+    [
+      "You magically get every item from one shop for free for a day, but it can’t be a tech or clothing store—what kind of place are you raiding?",
+      1
+    ],
+    [
+      "Back when you were a kid, what super random object or spot felt “magical” to you for no real reason at all?",
+      1
+    ],
+    [
+      "You open your fridge and everything inside has turned into one single food item (same thing in every container) — what food are you now stuck with?",
+      1
+    ],
+    [
+      "What’s a minor outfit or hair disaster you didn’t notice all day until someone finally pointed it out?",
+      1
+    ],
+    [
+      "You wake up with the power to make one everyday object play a funny sound effect every time it’s used—what are you picking and what sound does it make?",
+      0
+    ],
+    [
+      "You’re handed the aux cord in a car full of people you barely know—what song are you risking it all with first?",
+      0
+    ],
+    [
+      "You open your phone and the app store only has space for three apps total—what’s staying on your home screen?",
+      0
+    ],
+    [
+      "What super hyped mobile game did you try for 10 minutes and instantly decide “yeah, this ain’t it”?",
+      0
+    ],
+    [
+      "What’s a minor social fail you keep doing on loop, like saying “you too” to the cashier who just told you to enjoy your meal?",
+      0
+    ]
+  ],
+  "lowest_rated": [
+    [
+      "You open your messages and see a wildly out-of-context text from someone—what does it say?",
+      -5
+    ],
+    [
+      "What’s a tiny, ridiculous thing you once did to impress someone that still makes you want to disappear when you remember it?",
+      -4
+    ],
+    [
+      "You ever confidently waved back at someone who actually wasn’t waving at you—how did you play it off?",
+      -2
+    ],
+    [
+      "You suddenly gain the ability to talk to one type of household object—what are you chatting with, and what are you asking it first?",
+      -2
+    ],
+    [
+      "You wake up and your bed has a “teleport” button that sends you somewhere comfy but not dangerous—where are you tapping to go first thing in the morning?",
+      -2
+    ],
+    [
+      "You open a game and the character creator is weirdly detailed—what’s the first thing you always spend way too long customizing?",
+      -2
+    ],
+    [
+      "Is there a sound from your childhood (like an old ringtone, startup noise, or toy jingle) that would instantly take you back if you heard it today?",
+      -1
+    ],
+    [
+      "What’s a tiny, harmless lie you told as a kid that still randomly makes you cringe when you remember it?",
+      -1
+    ],
+    [
+      "You open your streaming app and it only lets you play one song on repeat all day—what are you putting on?",
+      -1
+    ],
+    [
+      "What’s a super popular show or movie that everyone swears is amazing, but you secretly found kinda meh or couldn’t even finish?",
+      -1
+    ],
+    [
+      "You’re suddenly the main character of a video game based on your everyday life—what kind of game is it and what’s your special move called?",
+      -1
+    ]
+  ],
+  "last_qotd_date": "2026-01-21"
 }
