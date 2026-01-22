@@ -794,12 +794,6 @@ async def addmovie(interaction: discord.Interaction, movie: str):
     await interaction.response.defer()
     
     try:
-        # Check if command is used in movie-night channel
-        if not hasattr(interaction.channel, 'name') or interaction.channel.name != "movie-night":
-            await interaction.followup.send("❌ This command can only be used in the #movie-night channel.")
-            logger.warning(f"User {interaction.user.display_name} attempted to use /addmovie outside movie-night channel")
-            return
-        
         # Load current movie list
         movies = await load_movie_data()
         
@@ -827,12 +821,6 @@ async def choosemovie(interaction: discord.Interaction):
     await interaction.response.defer()
     
     try:
-        # Check if command is used in movie-night channel
-        if not hasattr(interaction.channel, 'name') or interaction.channel.name != "movie-night":
-            await interaction.followup.send("❌ This command can only be used in the #movie-night channel.")
-            logger.warning(f"User {interaction.user.display_name} attempted to use /choosemovie outside movie-night channel")
-            return
-        
         import random
         
         # Load movie list
