@@ -22,7 +22,7 @@ async def get_chatgpt_response_with_retry(prompt, max_retries=None):
     Will retry forever if max_retries is None.
     """
     retry_count = 0
-    current_model = "gpt-5.1"
+    current_model = "gpt-5.2"
     fallback_used = False
     
     while True:
@@ -46,9 +46,9 @@ async def get_chatgpt_response_with_retry(prompt, max_retries=None):
             except Exception:
                 invalid_model_error = False
 
-            if invalid_model_error and not fallback_used and current_model != 'gpt-4':
-                logger.warning(f"Model '{current_model}' appears unavailable. Falling back to 'gpt-4' once.")
-                current_model = 'gpt-4'
+            if invalid_model_error and not fallback_used and current_model != 'gpt-5.1':
+                logger.warning(f"Model '{current_model}' appears unavailable. Falling back to 'gpt-5.1' once.")
+                current_model = 'gpt-5.1'
                 fallback_used = True
                 # Immediate retry without additional delay
                 continue

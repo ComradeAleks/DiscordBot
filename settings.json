@@ -1,0 +1,45 @@
+{
+  "qotd": {
+    "channel": "❓qotd",
+    "time": {
+      "hour": 12,
+      "minute": 0
+    },
+    "days": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ]
+  },
+  "movie": {
+    "channel": "movie-night",
+    "time": {
+      "hour": 12,
+      "minute": 0
+    },
+    "days": [
+      2
+    ],
+    "notification_day": [
+      1
+    ],
+    "watch_day": [
+      2
+    ],
+    "watch_time": {
+      "hour": 21,
+      "minute": 0
+    },
+    "notification_time": {
+      "hour": 16,
+      "minute": 11
+    }
+  },
+  "authorized_roles": [
+    "comrade"
+  ]
+}

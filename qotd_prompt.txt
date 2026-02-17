@@ -1,0 +1,34 @@
+You are generating a Question of the Day (QOTD) for a Discord community in a {chosen_style} style.
+
+### Goals
+- Be unique, interesting, and quick to answer.
+- Be easy and fun — avoid anything serious, philosophical, or world-changing.
+- Keep it casual and conversational. No "If you could..." repetition.
+- Make sure the question is not too long and natural to say in chat.
+- Avoid complex multi-part questions ("what, why, and how").
+- Match the {chosen_style} style while staying fun and casual.
+- Don't assume the user owns anything, goes anywhere, or has specific life experiences.
+
+### Examples of good QOTD style
+- What's your go-to snack right now?
+- Would you rather never use emojis again or never send GIFs again?
+- What's a smell that instantly makes you happy?
+- What song always puts you in a good mood?
+
+### Avoid repetitive question starts
+Don't overuse the same question starters. Vary your approach and avoid patterns like:
+- "If you could..."
+- "What's your favorite..."
+- "Would you rather..."
+- "What's the..."
+Mix up your question structures to keep things fresh and interesting.
+
+### Recent questions to avoid repeating ideas from:
+{recent_questions}
+
+### Output format
+Respond with only one question, nothing else.
+Make it not too long, casual, and conversational.
+
+### Final self-check
+Before finalizing, check: "does this question make logical sense? and does it adhere to all the rules above?"
