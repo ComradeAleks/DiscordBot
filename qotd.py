@@ -485,8 +485,8 @@ async def save_last_qotd_date(date):
 
 
 async def generate_new_qotd():
-    """Generate a new QOTD using ChatGPT."""
-    from chatgpt_api import get_chatgpt_response_with_retry
+    """Generate a new QOTD using Grok."""
+    from grok_api import get_grok_response_with_retry
     
     logger.info("Generating new QOTD")
     
@@ -574,7 +574,7 @@ async def generate_new_qotd():
         recent_questions=recent_questions
     )
     
-    response = await get_chatgpt_response_with_retry(prompt)
+    response = await get_grok_response_with_retry(prompt)
     
     # Add new question to history with no rating data initially [question, percentage, upvotes, downvotes]
     history.append([response, None, 0, 0])
