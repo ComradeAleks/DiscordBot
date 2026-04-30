@@ -25,7 +25,7 @@
       2
     ],
     "notification_day": [
-      1
+      0
     ],
     "watch_day": [
       2
@@ -35,8 +35,8 @@
       "minute": 0
     },
     "notification_time": {
-      "hour": 16,
-      "minute": 11
+      "hour": 12,
+      "minute": 0
     }
   },
   "authorized_roles": [

@@ -1,561 +1,211 @@
 {
   "history": [
-    [
-      "If you could experience a day in the life of any fictional character, who would you choose and why?",
-      null
-    ],
-    [
-      "If there was a movie made of your life, who would you want to play your character and why?",
-      null
-    ],
-    [
-      "If you could teleport to any place in the world right now, just for a day, where would you choose and what would you do there?",
-      null
-    ],
-    [
-      "If you could have one superpower for a day, what would it be and how would you use it?",
-      null
-    ],
-    [
-      "If you could undertake an extraordinary adventure anywhere in the world, what would it entail and why?",
-      null
-    ],
-    [
-      "If you could be transformed into any animal for a day, which one would you choose and how would you spend your day?",
-      null
-    ],
-    [
-      "If you could create your ideal meal consisting of an appetizer, main course, dessert, and beverage, what would each be and why?",
-      null
-    ],
-    [
-      "If you were to write a children's book, what moral or life lesson would you want to impart, and how would you weave it into your story?",
-      null
-    ],
-    [
-      "If you could travel back in time to witness any single historical event firsthand, what event would you choose and why?",
-      null
-    ],
-    [
-      "If you could compose the soundtrack to your life, which three songs would you select and why?",
-      null
-    ],
-    [
-      "If you could make a rule for a day and everyone had to follow it, what would it be and why?",
-      null
-    ],
-    [
-      "If you could choose one item to represent you, what would that item be and why does it symbolize you?",
-      null
-    ],
-    [
-      "If you could have dinner at any restaurant in the world, where would it be, what would you order, and who would you invite to join you?",
-      null
-    ],
-    [
-      "If you could transform your current home into your dream home, what changes would you make, and why are these changes important to you?",
-      null
-    ],
-    [
-      "If you could choose to master an instrument instantly, which one would it be and why?",
-      null
-    ],
-    [
-      "If you could design the perfect mini-vacation for yourself, where would you go, what would you see or do, and why is this your ideal short getaway?",
-      null
-    ],
-    [
-      "If you could transform your everyday commute into an enjoyable experience, how would you change it and what would it involve?",
-      null
-    ],
-    [
-      "If you could bring one fictional character to life for a day, who would it be and what would you do together?",
-      null
-    ],
-    [
-      "If you were asked to create an original board game, what would the theme be, what rules would you set, and what makes it enjoyable and unique?",
-      null
-    ],
-    [
-      "If you could integrate one habit from another culture into your daily routine, what would it be and why do you think it would be beneficial for you?",
-      null
-    ],
-    [
-      "If you were given the ability to speak and understand every single language for a day, where would you go, what would you do, and why?",
-      null
-    ],
-    [
-      "If you could momentarily pause time, what would you do with that moment and why?",
-      null
-    ],
-    [
-      "If you could design the perfect day from morning until night, what activities would it include, where would it take place, and who would you spend it with?",
-      null
-    ],
-    [
-      "If you could choose to be a main character in any book for a day, who would you be, what would you do, and why did you choose this particular character and book?",
-      null
-    ],
-    [
-      "If you could spend a day in your favorite painting or photograph, which one would it be and how would you pass your time there?",
-      null
-    ],
-    [
-      "If you could participate in the creation of any famous work of art, what would it be, and in what ways do you think your influence would change the final piece?",
-      null
-    ],
-    [
-      "If you were to star as the protagonist in a video game for a day, which game would it be, what adventures would you undertake, and why did you choose this particular game?",
-      null
-    ],
-    [
-      "If you could step into the universe of any cartoon, which one would it be, what character would you interact with most, and why?",
-      null
-    ],
-    [
-      "If you woke up tomorrow with a newfound talent, what would you want that talent to be, how would you make the most out of it, and why did you choose this particular talent?",
-      null
-    ],
-    [
-      "If you could host a talk show for a day, who would be your dream guest, what interesting questions would you ask, and why did you choose this individual?",
-      null
-    ],
-    [
-      "If you could start a social movement that could positively impact the world, what would it be about, how would you get it started, and why do you think it's important?",
-      null
-    ],
-    [
-      "What TV show theme song has been stuck in your head lately?",
-      null
-    ],
-    [
-      "What's a movie quote that you use in real life?",
-      null
-    ],
-    [
-      "What's the funniest autocorrect fail you've ever had on your phone?",
-      null
-    ],
-    [
-      "What videogame level could you absolutely ace blindfolded?",
-      null
-    ],
-    [
-      "What was the silliest thing you believed as a kid?",
-      null
-    ],
-    [
-      "What's the most bizarre food combo you've tried that surprisingly worked out well?",
-      null
-    ],
-    [
-      "What's your secret superpower no one knows about, like always getting green lights or always finding the best parking spots?",
-      null
-    ],
-    [
-      "What's the most facepalm-worthy text you've ever sent to the wrong person?",
-      null
-    ],
-    [
-      "What was your childhood nickname and how did you earn it?",
-      null
-    ],
-    [
-      "What's the most random fact you know off the top of your head?",
-      null
-    ],
-    [
-      "What food smells so good to you that you could recognize it anywhere?",
-      null
-    ],
-    [
-      "How quickly can you name three items that are currently on your desk?",
-      null
-    ],
-    [
-      "Have you ever tried to guess a song in only two seconds? If so, what song was it?",
-      null
-    ],
-    [
-      "What cartoon character did you secretly wish was your best friend when you were a kid?",
-      null
-    ],
-    [
-      "What's one thing you've accidentally collected too much of without really trying?",
-      null
-    ],
-    [
-      "What was the last song you played on repeat and why?",
-      null
-    ],
-    [
-      "What's the weirdest dream you've had that you can still vividly remember?",
-      null
-    ],
-    [
-      "What's the most unexpected item you've discovered while cleaning your room?",
-      null
-    ],
-    [
-      "Do you think pineapple is a legit pizza topping? If so, why are you such a strong supporter of this culinary combination?",
-      null
-    ],
-    [
-      "Have you found a dish at a restaurant that you liked so much, you tried to recreate it at home? How did it turn out?",
-      null
-    ],
-    [
-      "What's the weirdest thing you’ve ever found in your pocket after a long day?",
-      null
-    ],
-    [
-      "Which childhood toy can you absolutely not part with, even as an adult?",
-      null
-    ],
-    [
-      "What sound does your alarm make in the morning, and why did you choose that particular sound?",
-      null
-    ],
-    [
-      "What's a popular TV show that everyone seems to love, but you can't get into?",
-      null
-    ],
-    [
-      "What's the oddest thing you've used as a makeshift bookmark?",
-      null
-    ],
-    [
-      "What's an item you own that has a funny or quirky story attached to it?",
-      null
-    ],
-    [
-      "Who's one celebrity you'd really want to meet at a casual coffee shop and why?",
-      null
-    ],
-    [
-      "Do you have a made-up word that only makes sense in your friend group or family? How did it come about?",
-      null
-    ],
-    [
-      "What's the most awkward movie you've ever watched with your parents and why?",
-      null
-    ],
-    [
-      "What's a picture or photo you've taken that still makes you laugh every time you see it?",
-      null
-    ],
-    [
-      "What's a book you've reread the most and what keeps drawing you back to it?",
-      null
-    ],
-    [
-      "What's a song that you completely love but is generally hated by most people?",
-      null
-    ],
-    [
-      "Which old-school video game console do you still own and what is your favorite game to play on it?",
-      null
-    ],
-    [
-      "What's the funniest autocorrect fail you've ever experienced?",
-      null
-    ],
-    [
-      "What's the most unusual place where you found Wi-Fi?",
-      null
-    ],
-    [
-      "What's an unusual activity that you find incredibly relaxing?",
-      null
-    ],
-    [
-      "What's an unexpected item you've found in your fridge that left you completely puzzled?",
-      null
-    ],
-    [
-      "What's the funniest or most unexpected thing your pet has ever done?",
-      null
-    ],
-    [
-      "Which classic movie quote do you find yourself using on a regular basis?",
-      null
-    ],
-    [
-      "What's that one cooking sound that makes you hungry, no matter what?",
-      null
-    ],
-    [
-      "What's the most unusual food combination you've tried that turned out to be surprisingly tasty?",
-      null
-    ],
-    [
-      "What's the strangest thing you've ever Googled out of sheer curiosity?",
-      null
-    ],
-    [
-      "What's the silliest dance move you've ever attempted in public?",
-      null
-    ],
-    [
-      "Have you ever given a weird or funny name to an object you own? What's the story behind it?",
-      null
-    ],
-    [
-      "Ever tried speaking to a device's virtual assistant for fun? What's the funniest response you got?",
-      null
-    ],
-    [
-      "Did a movie or book ever inspire you to visit a specific place? Which one and where was it?",
-      null
-    ],
-    [
-      "What's that one crisp sound that always soothes you or puts a smile on your face?",
-      null
-    ],
-    [
-      "Which cartoon theme song from your childhood can you still hum perfectly today?",
-      null
-    ],
-    [
-      "What's one nostalgic candy from your childhood that you still crave sometimes?",
-      null
-    ],
-    [
-      "What's the most amusing or weird misconception someone's had about you in the past?",
-      2
-    ],
-    [
-      "Remember the good old game of 'tag, you're it'? If you could choose anyone in the world to be 'it', who would you choose and why?",
-      -5
-    ],
-    [
-      "Ever had a disagreement with a pet or an animal? What was it about?",
-      -5
-    ],
-    [
-      "What’s a super popular snack or food that you just don’t get the hype for at all?",
-      null
-    ],
-    [
-      "Is there a sound from your childhood (like an old ringtone, startup noise, or toy jingle) that would instantly take you back if you heard it today?",
-      -1
-    ],
-    [
-      "What’s a tiny, harmless lie you told as a kid that still randomly makes you cringe when you remember it?",
-      -1
-    ],
-    [
-      "What’s a super popular hobby or trend that everyone seems obsessed with, but you secretly think looks kinda boring?",
-      2
-    ],
-    [
-      "You open your streaming app and it only lets you play one song on repeat all day—what are you putting on?",
-      -1
-    ],
-    [
-      "You get a free “skip” on one boring life task for a whole year—what are you choosing to never do?",
-      1
-    ],
-    [
-      "You wake up with the power to make one everyday object play a funny sound effect every time it’s used—what are you picking and what sound does it make?",
-      0
-    ],
-    [
-      "What’s a tiny, completely harmless thing you did years ago that still makes you randomly cringe in the shower?",
-      null
-    ],
-    [
-      "A genie appears but can only grant super boring powers—what hilariously lame “superpower” are you taking anyway?",
-      1
-    ],
-    [
-      "You ever confidently waved back at someone who actually wasn’t waving at you—how did you play it off?",
-      -2
-    ],
-    [
-      "What’s a super popular show or movie that everyone swears is amazing, but you secretly found kinda meh or couldn’t even finish?",
-      -1
-    ],
-    [
-      "You’re handed the aux cord in a car full of people you barely know—what song are you risking it all with first?",
-      0
-    ],
-    [
-      "You open your phone and the app store only has space for three apps total—what’s staying on your home screen?",
-      0
-    ],
-    [
-      "You suddenly gain the ability to talk to one type of household object—what are you chatting with, and what are you asking it first?",
-      -2
-    ],
-    [
-      "You wake up and your bed has a “teleport” button that sends you somewhere comfy but not dangerous—where are you tapping to go first thing in the morning?",
-      -2
-    ],
-    [
-      "What’s a tiny, ridiculous thing you once did to impress someone that still makes you want to disappear when you remember it?",
-      -4
-    ],
-    [
-      "You open your messages and see a wildly out-of-context text from someone—what does it say?",
-      -5
-    ],
-    [
-      "You magically get every item from one shop for free for a day, but it can’t be a tech or clothing store—what kind of place are you raiding?",
-      1
-    ],
-    [
-      "You suddenly become a master chef but only for one super specific food—what ridiculously random thing are you now famous for making?",
-      null
-    ],
-    [
-      "You get to instantly delete one super mildly annoying thing from everyday life (nothing serious, just tiny stuff)—what are you wiping off the face of the earth?",
-      null
-    ],
-    [
-      "What super hyped mobile game did you try for 10 minutes and instantly decide “yeah, this ain’t it”?",
-      0
-    ],
-    [
-      "What’s something small or silly from “back then” (a toy, song, game, website, anything) that randomly pops into your head and makes you weirdly happy?",
-      null
-    ],
-    [
-      "You open a game and the character creator is weirdly detailed—what’s the first thing you always spend way too long customizing?",
-      -2
-    ],
-    [
-      "You get an instant 10/10 skill in something completely useless in real life—what dumb talent are you flexing?",
-      null
-    ],
-    [
-      "Back when you were a kid, what super random object or spot felt “magical” to you for no real reason at all?",
-      1
-    ],
-    [
-      "You open your fridge and everything inside has turned into one single food item (same thing in every container) — what food are you now stuck with?",
-      1
-    ],
-    [
-      "What’s a super popular emoji you secretly think is overrated or low‑key annoying?",
-      null
-    ],
-    [
-      "You’re suddenly the main character of a video game based on your everyday life—what kind of game is it and what’s your special move called?",
-      -1
-    ],
-    [
-      "What’s a minor social fail you keep doing on loop, like saying “you too” to the cashier who just told you to enjoy your meal?",
-      0
-    ],
-    [
-      "What’s a minor outfit or hair disaster you didn’t notice all day until someone finally pointed it out?",
-      1
-    ],
-    [
-      "What’s a super popular drink (any kind) that you quietly think tastes kinda bad?",
-      null
-    ],
-    [
-      "You open your phone and every app icon has turned into a random food— which one are you tapping first, and what food is it now?",
-      null
-    ]
+    ["If you could experience a day in the life of any fictional character, who would you choose and why?", null, 0, 0],
+    ["If there was a movie made of your life, who would you want to play your character and why?", null, 0, 0],
+    ["If you could teleport to any place in the world right now, just for a day, where would you choose and what would you do there?", null, 0, 0],
+    ["If you could have one superpower for a day, what would it be and how would you use it?", null, 0, 0],
+    ["If you could undertake an extraordinary adventure anywhere in the world, what would it entail and why?", null, 0, 0],
+    ["If you could be transformed into any animal for a day, which one would you choose and how would you spend your day?", null, 0, 0],
+    ["If you could create your ideal meal consisting of an appetizer, main course, dessert, and beverage, what would each be and why?", null, 0, 0],
+    ["If you were to write a children's book, what moral or life lesson would you want to impart, and how would you weave it into your story?", null, 0, 0],
+    ["If you could travel back in time to witness any single historical event firsthand, what event would you choose and why?", null, 0, 0],
+    ["If you could compose the soundtrack to your life, which three songs would you select and why?", null, 0, 0],
+    ["If you could make a rule for a day and everyone had to follow it, what would it be and why?", null, 0, 0],
+    ["If you could choose one item to represent you, what would that item be and why does it symbolize you?", null, 0, 0],
+    ["If you could have dinner at any restaurant in the world, where would it be, what would you order, and who would you invite to join you?", null, 0, 0],
+    ["If you could transform your current home into your dream home, what changes would you make, and why are these changes important to you?", null, 0, 0],
+    ["If you could choose to master an instrument instantly, which one would it be and why?", null, 0, 0],
+    ["If you could design the perfect mini-vacation for yourself, where would you go, what would you see or do, and why is this your ideal short getaway?", null, 0, 0],
+    ["If you could transform your everyday commute into an enjoyable experience, how would you change it and what would it involve?", null, 0, 0],
+    ["If you could bring one fictional character to life for a day, who would it be and what would you do together?", null, 0, 0],
+    ["If you were asked to create an original board game, what would the theme be, what rules would you set, and what makes it enjoyable and unique?", null, 0, 0],
+    ["If you could integrate one habit from another culture into your daily routine, what would it be and why do you think it would be beneficial for you?", null, 0, 0],
+    ["If you were given the ability to speak and understand every single language for a day, where would you go, what would you do, and why?", null, 0, 0],
+    ["If you could momentarily pause time, what would you do with that moment and why?", null, 0, 0],
+    ["If you could design the perfect day from morning until night, what activities would it include, where would it take place, and who would you spend it with?", null, 0, 0],
+    ["If you could choose to be a main character in any book for a day, who would you be, what would you do, and why did you choose this particular character and book?", null, 0, 0],
+    ["If you could spend a day in your favorite painting or photograph, which one would it be and how would you pass your time there?", null, 0, 0],
+    ["If you could participate in the creation of any famous work of art, what would it be, and in what ways do you think your influence would change the final piece?", null, 0, 0],
+    ["If you were to star as the protagonist in a video game for a day, which game would it be, what adventures would you undertake, and why did you choose this particular game?", null, 0, 0],
+    ["If you could step into the universe of any cartoon, which one would it be, what character would you interact with most, and why?", null, 0, 0],
+    ["If you woke up tomorrow with a newfound talent, what would you want that talent to be, how would you make the most out of it, and why did you choose this particular talent?", null, 0, 0],
+    ["If you could host a talk show for a day, who would be your dream guest, what interesting questions would you ask, and why did you choose this individual?", null, 0, 0],
+    ["If you could start a social movement that could positively impact the world, what would it be about, how would you get it started, and why do you think it's important?", null, 0, 0],
+    ["What TV show theme song has been stuck in your head lately?", null, 0, 0],
+    ["What's a movie quote that you use in real life?", null, 0, 0],
+    ["What's the funniest autocorrect fail you've ever had on your phone?", null, 0, 0],
+    ["What videogame level could you absolutely ace blindfolded?", null, 0, 0],
+    ["What was the silliest thing you believed as a kid?", null, 0, 0],
+    ["What's the most bizarre food combo you've tried that surprisingly worked out well?", null, 0, 0],
+    ["What's your secret superpower no one knows about, like always getting green lights or always finding the best parking spots?", null, 0, 0],
+    ["What's the most facepalm-worthy text you've ever sent to the wrong person?", null, 0, 0],
+    ["What was your childhood nickname and how did you earn it?", null, 0, 0],
+    ["What's the most random fact you know off the top of your head?", null, 0, 0],
+    ["What food smells so good to you that you could recognize it anywhere?", null, 0, 0],
+    ["How quickly can you name three items that are currently on your desk?", null, 0, 0],
+    ["Have you ever tried to guess a song in only two seconds? If so, what song was it?", null, 0, 0],
+    ["What cartoon character did you secretly wish was your best friend when you were a kid?", null, 0, 0],
+    ["What's one thing you've accidentally collected too much of without really trying?", null, 0, 0],
+    ["What was the last song you played on repeat and why?", null, 0, 0],
+    ["What's the weirdest dream you've had that you can still vividly remember?", null, 0, 0],
+    ["What's the most unexpected item you've discovered while cleaning your room?", null, 0, 0],
+    ["Do you think pineapple is a legit pizza topping? If so, why are you such a strong supporter of this culinary combination?", null, 0, 0],
+    ["Have you found a dish at a restaurant that you liked so much, you tried to recreate it at home? How did it turn out?", null, 0, 0],
+    ["What's the weirdest thing you’ve ever found in your pocket after a long day?", null, 0, 0],
+    ["Which childhood toy can you absolutely not part with, even as an adult?", null, 0, 0],
+    ["What sound does your alarm make in the morning, and why did you choose that particular sound?", null, 0, 0],
+    ["What's a popular TV show that everyone seems to love, but you can't get into?", null, 0, 0],
+    ["What's the oddest thing you've used as a makeshift bookmark?", null, 0, 0],
+    ["What's an item you own that has a funny or quirky story attached to it?", null, 0, 0],
+    ["Who's one celebrity you'd really want to meet at a casual coffee shop and why?", null, 0, 0],
+    ["Do you have a made-up word that only makes sense in your friend group or family? How did it come about?", null, 0, 0],
+    ["What's the most awkward movie you've ever watched with your parents and why?", null, 0, 0],
+    ["What's a picture or photo you've taken that still makes you laugh every time you see it?", null, 0, 0],
+    ["What's a book you've reread the most and what keeps drawing you back to it?", null, 0, 0],
+    ["What's a song that you completely love but is generally hated by most people?", null, 0, 0],
+    ["Which old-school video game console do you still own and what is your favorite game to play on it?", null, 0, 0],
+    ["What's the funniest autocorrect fail you've ever experienced?", null, 0, 0],
+    ["What's the most unusual place where you found Wi-Fi?", null, 0, 0],
+    ["What's an unusual activity that you find incredibly relaxing?", null, 0, 0],
+    ["What's an unexpected item you've found in your fridge that left you completely puzzled?", null, 0, 0],
+    ["What's the funniest or most unexpected thing your pet has ever done?", null, 0, 0],
+    ["Which classic movie quote do you find yourself using on a regular basis?", null, 0, 0],
+    ["What's that one cooking sound that makes you hungry, no matter what?", null, 0, 0],
+    ["What's the most unusual food combination you've tried that turned out to be surprisingly tasty?", null, 0, 0],
+    ["What's the strangest thing you've ever Googled out of sheer curiosity?", null, 0, 0],
+    ["What's the silliest dance move you've ever attempted in public?", null, 0, 0],
+    ["Have you ever given a weird or funny name to an object you own? What's the story behind it?", null, 0, 0],
+    ["Ever tried speaking to a device's virtual assistant for fun? What's the funniest response you got?", null, 0, 0],
+    ["Did a movie or book ever inspire you to visit a specific place? Which one and where was it?", null, 0, 0],
+    ["What's that one crisp sound that always soothes you or puts a smile on your face?", null, 0, 0],
+    ["Which cartoon theme song from your childhood can you still hum perfectly today?", null, 0, 0],
+    ["What's one nostalgic candy from your childhood that you still crave sometimes?", null, 0, 0],
+    ["What's the most amusing or weird misconception someone's had about you in the past?", 2, 0, 0],
+    ["Remember the good old game of 'tag, you're it'? If you could choose anyone in the world to be 'it', who would you choose and why?", -5, 0, 0],
+    ["Ever had a disagreement with a pet or an animal? What was it about?", -5, 0, 0],
+    ["What’s a super popular snack or food that you just don’t get the hype for at all?", null, 0, 0],
+    ["Is there a sound from your childhood (like an old ringtone, startup noise, or toy jingle) that would instantly take you back if you heard it today?", -1, 0, 0],
+    ["What’s a tiny, harmless lie you told as a kid that still randomly makes you cringe when you remember it?", -1, 0, 0],
+    ["What’s a super popular hobby or trend that everyone seems obsessed with, but you secretly think looks kinda boring?", 2, 0, 0],
+    ["You open your streaming app and it only lets you play one song on repeat all day—what are you putting on?", -1, 0, 0],
+    ["You get a free “skip” on one boring life task for a whole year—what are you choosing to never do?", 1, 0, 0],
+    ["You wake up with the power to make one everyday object play a funny sound effect every time it’s used—what are you picking and what sound does it make?", 0, 0, 0],
+    ["What’s a tiny, completely harmless thing you did years ago that still makes you randomly cringe in the shower?", null, 0, 0],
+    ["A genie appears but can only grant super boring powers—what hilariously lame “superpower” are you taking anyway?", 1, 0, 0],
+    ["You ever confidently waved back at someone who actually wasn’t waving at you—how did you play it off?", -2, 0, 0],
+    ["What’s a super popular show or movie that everyone swears is amazing, but you secretly found kinda meh or couldn’t even finish?", -1, 0, 0],
+    ["You’re handed the aux cord in a car full of people you barely know—what song are you risking it all with first?", 0, 0, 0],
+    ["You open your phone and the app store only has space for three apps total—what’s staying on your home screen?", 0, 0, 0],
+    ["You suddenly gain the ability to talk to one type of household object—what are you chatting with, and what are you asking it first?", -2, 0, 0],
+    ["You wake up and your bed has a “teleport” button that sends you somewhere comfy but not dangerous—where are you tapping to go first thing in the morning?", -2, 0, 0],
+    ["What’s a tiny, ridiculous thing you once did to impress someone that still makes you want to disappear when you remember it?", -4, 0, 0],
+    ["You open your messages and see a wildly out-of-context text from someone—what does it say?", -5, 0, 0],
+    ["You magically get every item from one shop for free for a day, but it can’t be a tech or clothing store—what kind of place are you raiding?", 1, 0, 0],
+    ["You suddenly become a master chef but only for one super specific food—what ridiculously random thing are you now famous for making?", null, 0, 0],
+    ["You get to instantly delete one super mildly annoying thing from everyday life (nothing serious, just tiny stuff)—what are you wiping off the face of the earth?", null, 0, 0],
+    ["What super hyped mobile game did you try for 10 minutes and instantly decide “yeah, this ain’t it”?", 0, 0, 0],
+    ["What’s something small or silly from “back then” (a toy, song, game, website, anything) that randomly pops into your head and makes you weirdly happy?", null, 0, 0],
+    ["You open a game and the character creator is weirdly detailed—what’s the first thing you always spend way too long customizing?", -2, 0, 0],
+    ["You get an instant 10/10 skill in something completely useless in real life—what dumb talent are you flexing?", null, 0, 0],
+    ["Back when you were a kid, what super random object or spot felt “magical” to you for no real reason at all?", 1, 0, 0],
+    ["You open your fridge and everything inside has turned into one single food item (same thing in every container) — what food are you now stuck with?", 1, 0, 0],
+    ["What’s a super popular emoji you secretly think is overrated or low‑key annoying?", null, 0, 0],
+    ["You’re suddenly the main character of a video game based on your everyday life—what kind of game is it and what’s your special move called?", -1, 0, 0],
+    ["What’s a minor social fail you keep doing on loop, like saying “you too” to the cashier who just told you to enjoy your meal?", 0, 0, 0],
+    ["What’s a minor outfit or hair disaster you didn’t notice all day until someone finally pointed it out?", 1, 0, 0],
+    ["What’s a super popular drink (any kind) that you quietly think tastes kinda bad?", null, 0, 0],
+    ["You open your phone and every app icon has turned into a random food— which one are you tapping first, and what food is it now?", null, 0, 0],
+    ["What random kid chant or rhyme do you still know by heart?", 0.0, 0, 0],
+    ["Which old ad jingle is still stuck in your head?", null, 0, 0],
+    ["Ever cackle at your own joke way harder than anyone else?", 0.0, 0, 0],
+    ["Socks with sandals: genius hack or total fashion crime?", 100.0, 1, 0],
+    ["Toothpaste on your brush: perfect stripe or chaotic dots?", 0.0, 1, 1],
+    ["Ever find cash in an old pocket and feel like you won the lottery—what was it?", 100.0, 1, 0],
+    ["Pizza crust: devour it or straight to the trash?", 100.0, 2, 0],
+    ["Mayo on fries: genius move or total crime?", 100.0, 2, 0],
+    ["Fries dipped in milkshake: genius combo or straight-up crime?", 100.0, 2, 0],
+    ["Blanket burrito or starfish sprawl?", -100.0, 0, 1],
+    ["Movie popcorn: butter overload or barely any?", 100.0, 1, 0],
+    ["Texts with periods or straight run-ons?", -100.0, 0, 2],
+    ["What silly kid \"superpower\" did you swear you had?", 0.0, 0, 0],
+    ["Elevator: awkward small talk or total silence?", -100.0, 0, 2],
+    ["Song lyric you still sing wrong every time?", 100.0, 2, 0],
+    ["Texts: hit send and pray or endless edits?", -100.0, 0, 1],
+    ["What's the silliest cloud shape you've ever spotted?", 0.0, 0, 0],
+    ["Old dial-up modem screech: weirdly nostalgic or pure trauma?", -100.0, 0, 2],
+    ["Cookie dough: sneak raw bites or bake 'em all?", 0.0, 0, 0],
+    ["Ever narrate your day like a nature documentary voiceover?", -100.0, 0, 1],
+    ["Ever yell at your GPS like it's got a personal grudge?", 100.0, 1, 0],
+    ["Autocorrect: lifesaver or total villain?", 100.0, 4, 0],
+    ["Toilet paper: over the roll or under forever?", 0.0, 0, 0],
+    ["What's the funniest username you've ever spotted?", 0.0, 0, 0],
+    ["Drop your go-to movie quote for everyday chaos.", 100.0, 2, 0],
+    ["How many browser tabs do you have open right now?", 100.0, 2, 0],
+    ["Spill your sneakiest kitchen shortcut.", -100.0, 0, 1],
+    ["What was your unbeatable hide-and-seek spot?", 0.0, 0, 0],
+    ["Which emoji do you slap on every message?", 0.0, 0, 0],
+    ["Drop your wildest fictional ship.", 0.0, 0, 0],
+    ["What's your shopping cart return policy?", -100.0, 0, 1],
+    ["How do you even attempt to fold a fitted sheet?", -100.0, 0, 2],
+    ["What's your villain era anthem?", -100.0, 0, 3],
+    ["Is a hot dog a sandwich?", 0.0, 0, 0],
+    ["What's the weirdest face you've spotted in an everyday object?", -100.0, 0, 2],
+    ["Ever forget to feed your Tamagotchi overnight?", -100.0, 0, 2],
+    ["How's your phone battery holding up right now?", 100.0, 1, 0],
+    ["Ever get the \"Are you still watching?\" prompt after just one episode?", 0.0, 0, 0],
+    ["How long does it take you to spot your phone when it's \"missing\"?", 0.0, 0, 0],
+    ["Ever delete a sent message 2 seconds later?", -100.0, 0, 1],
+    ["How many times do you check the fridge before admitting it's empty?", 0.0, 0, 0],
+    ["Ever wave at the wrong car in the parking lot?", 0.0, 0, 0],
+    ["How many apps are yelling for updates right now?", 0.0, 0, 0],
+    ["Ever send a voice note and instantly regret it?", 0.0, 0, 0],
+    ["Ever butt-dial someone awkward?", 0.0, 0, 0],
+    ["Ever forget to close your tabs before screen sharing?", 0.0, 0, 0],
+    ["How tangled is your charging cable right now?", -100.0, 0, 3],
+    ["Rough guess: how many times have you unlocked your phone today?", -100.0, 0, 2],
+    ["What's your WiFi name?", 0.0, 0, 0],
+    ["How packed is your Downloads folder right now?", 0.0, 0, 0],
+    ["Ever accidentally like an old post while doomscrolling?", 0.0, 0, 0],
+    ["Ever accidentally reply-all to the wrong crowd?", -100.0, 0, 2],
+    ["Ever forget you're on mute during a call?", 0.0, 0, 0],
+    ["Ever feel your phone vibrate when it's sitting dead silent across the room?", -100.0, 0, 2],
+    ["How fast do you click \"I agree\" on terms and conditions?", 0.0, 0, 0],
+    ["Ever sniff test your leftovers before diving in?", 0.0, 0, 0],
+    ["Ever mistake your phone for the TV remote?", null, 0, 0]
   ],
   "highest_rated": [
-    [
-      "What’s a super popular hobby or trend that everyone seems obsessed with, but you secretly think looks kinda boring?",
-      2
-    ],
-    [
-      "You get a free “skip” on one boring life task for a whole year—what are you choosing to never do?",
-      1
-    ],
-    [
-      "A genie appears but can only grant super boring powers—what hilariously lame “superpower” are you taking anyway?",
-      1
-    ],
-    [
-      "You magically get every item from one shop for free for a day, but it can’t be a tech or clothing store—what kind of place are you raiding?",
-      1
-    ],
-    [
-      "Back when you were a kid, what super random object or spot felt “magical” to you for no real reason at all?",
-      1
-    ],
-    [
-      "You open your fridge and everything inside has turned into one single food item (same thing in every container) — what food are you now stuck with?",
-      1
-    ],
-    [
-      "What’s a minor outfit or hair disaster you didn’t notice all day until someone finally pointed it out?",
-      1
-    ],
-    [
-      "You wake up with the power to make one everyday object play a funny sound effect every time it’s used—what are you picking and what sound does it make?",
-      0
-    ],
-    [
-      "You’re handed the aux cord in a car full of people you barely know—what song are you risking it all with first?",
-      0
-    ],
-    [
-      "You open your phone and the app store only has space for three apps total—what’s staying on your home screen?",
-      0
-    ],
-    [
-      "What super hyped mobile game did you try for 10 minutes and instantly decide “yeah, this ain’t it”?",
-      0
-    ],
-    [
-      "What’s a minor social fail you keep doing on loop, like saying “you too” to the cashier who just told you to enjoy your meal?",
-      0
-    ]
+    ["Autocorrect: lifesaver or total villain?", 100.0, 4, 0],
+    ["Pizza crust: devour it or straight to the trash?", 100.0, 2, 0],
+    ["Mayo on fries: genius move or total crime?", 100.0, 2, 0],
+    ["Fries dipped in milkshake: genius combo or straight-up crime?", 100.0, 2, 0],
+    ["Song lyric you still sing wrong every time?", 100.0, 2, 0],
+    ["Drop your go-to movie quote for everyday chaos.", 100.0, 2, 0],
+    ["How many browser tabs do you have open right now?", 100.0, 2, 0],
+    ["Socks with sandals: genius hack or total fashion crime?", 100.0, 1, 0],
+    ["Ever find cash in an old pocket and feel like you won the lottery—what was it?", 100.0, 1, 0],
+    ["Movie popcorn: butter overload or barely any?", 100.0, 1, 0],
+    ["Ever yell at your GPS like it's got a personal grudge?", 100.0, 1, 0],
+    ["How's your phone battery holding up right now?", 100.0, 1, 0],
+    ["What’s a super popular hobby or trend that everyone seems obsessed with, but you secretly think looks kinda boring?", 2],
+    ["You get a free “skip” on one boring life task for a whole year—what are you choosing to never do?", 1],
+    ["A genie appears but can only grant super boring powers—what hilariously lame “superpower” are you taking anyway?", 1]
   ],
   "lowest_rated": [
-    [
-      "You open your messages and see a wildly out-of-context text from someone—what does it say?",
-      -5
-    ],
-    [
-      "What’s a tiny, ridiculous thing you once did to impress someone that still makes you want to disappear when you remember it?",
-      -4
-    ],
-    [
-      "You ever confidently waved back at someone who actually wasn’t waving at you—how did you play it off?",
-      -2
-    ],
-    [
-      "You suddenly gain the ability to talk to one type of household object—what are you chatting with, and what are you asking it first?",
-      -2
-    ],
-    [
-      "You wake up and your bed has a “teleport” button that sends you somewhere comfy but not dangerous—where are you tapping to go first thing in the morning?",
-      -2
-    ],
-    [
-      "You open a game and the character creator is weirdly detailed—what’s the first thing you always spend way too long customizing?",
-      -2
-    ],
-    [
-      "Is there a sound from your childhood (like an old ringtone, startup noise, or toy jingle) that would instantly take you back if you heard it today?",
-      -1
-    ],
-    [
-      "What’s a tiny, harmless lie you told as a kid that still randomly makes you cringe when you remember it?",
-      -1
-    ],
-    [
-      "You open your streaming app and it only lets you play one song on repeat all day—what are you putting on?",
-      -1
-    ],
-    [
-      "What’s a super popular show or movie that everyone swears is amazing, but you secretly found kinda meh or couldn’t even finish?",
-      -1
-    ],
-    [
-      "You’re suddenly the main character of a video game based on your everyday life—what kind of game is it and what’s your special move called?",
-      -1
-    ]
+    ["What's your villain era anthem?", -100.0, 0, 3],
+    ["How tangled is your charging cable right now?", -100.0, 0, 3],
+    ["Texts with periods or straight run-ons?", -100.0, 0, 2],
+    ["Elevator: awkward small talk or total silence?", -100.0, 0, 2],
+    ["Old dial-up modem screech: weirdly nostalgic or pure trauma?", -100.0, 0, 2],
+    ["How do you even attempt to fold a fitted sheet?", -100.0, 0, 2],
+    ["What's the weirdest face you've spotted in an everyday object?", -100.0, 0, 2],
+    ["Ever forget to feed your Tamagotchi overnight?", -100.0, 0, 2],
+    ["Rough guess: how many times have you unlocked your phone today?", -100.0, 0, 2],
+    ["Ever accidentally reply-all to the wrong crowd?", -100.0, 0, 2],
+    ["Ever feel your phone vibrate when it's sitting dead silent across the room?", -100.0, 0, 2],
+    ["Blanket burrito or starfish sprawl?", -100.0, 0, 1],
+    ["Texts: hit send and pray or endless edits?", -100.0, 0, 1],
+    ["Ever narrate your day like a nature documentary voiceover?", -100.0, 0, 1],
+    ["Spill your sneakiest kitchen shortcut.", -100.0, 0, 1]
   ],
-  "last_qotd_date": "2026-01-21"
+  "last_qotd_date": "2026-04-30"
 }
