@@ -506,6 +506,166 @@ class RemoveRoleView(ui.View):
         self.add_item(RemoveRoleSelect(roles, settings_view))
 
 
+# Modal for adding subreddits
+class AddSubredditModal(ui.Modal, title="Add Subreddits"):
+    def __init__(self, settings_view):
+        super().__init__()
+        self.settings_view = settings_view
+        
+        self.subreddit_input = ui.TextInput(
+            label="Subreddit Name(s)",
+            placeholder="Enter subreddit names (separate multiple with commas)",
+            style=discord.TextStyle.short,
+            required=True,
+            max_length=500
+        )
+        self.add_item(self.subreddit_input)
+    
+    async def on_submit(self, interaction: discord.Interaction):
+        await interaction.response.defer()
+        
+        # Parse comma-separated subreddit names
+        subreddit_names = [r.strip().removeprefix('r/').removeprefix('/r/') for r in self.subreddit_input.value.split(',')]
+        
+        # Load current settings
+        settings = load_settings()
+        subreddits = settings.get("qotd", {}).get("subreddits", [])
+        
+        added_subreddits = []
+        already_exists = []
+        invalid_subreddits = []
+        
+        for name in subreddit_names:
+            if not name:
+                continue
+            # Check if already exists (case-insensitive)
+            if any(s.lower() == name.lower() for s in subreddits):
+                already_exists.append(name)
+            else:
+                # Test if subreddit is valid/accessible
+                from reddit_api import test_subreddit
+                success, message = await test_subreddit(name)
+                if success:
+                    subreddits.append(name)
+                    added_subreddits.append(name)
+                else:
+                    invalid_subreddits.append(f"{name} ({message})")
+        
+        response_parts = []
+        
+        if added_subreddits:
+            settings["qotd"]["subreddits"] = subreddits
+            save_settings(settings)
+            response_parts.append(f"✅ Added {len(added_subreddits)} subreddit(s): {', '.join('r/' + s for s in added_subreddits)}")
+            await self.settings_view.refresh_message(interaction)
+        
+        if already_exists:
+            response_parts.append(f"⚠️ Already existed: {', '.join('r/' + s for s in already_exists)}")
+        
+        if invalid_subreddits:
+            response_parts.append(f"❌ Invalid/inaccessible: {', '.join(invalid_subreddits)}")
+        
+        if response_parts:
+            await interaction.followup.send("\n\n".join(response_parts), ephemeral=True)
+        else:
+            await interaction.followup.send("❌ No valid subreddits provided.", ephemeral=True)
+
+
+# Select menu for removing subreddits
+class RemoveSubredditSelect(ui.Select):
+    def __init__(self, subreddits, settings_view):
+        self.settings_view = settings_view
+        
+        options = [
+            discord.SelectOption(
+                label=f"r/{subreddit}",
+                value=subreddit
+            )
+            for subreddit in subreddits[:25]  # Discord limit
+        ]
+        
+        super().__init__(
+            placeholder="Select subreddits to remove",
+            min_values=1,
+            max_values=min(len(options), 25),
+            options=options
+        )
+    
+    async def callback(self, interaction: discord.Interaction):
+        await interaction.response.defer()
+        
+        # Load current settings
+        settings = load_settings()
+        subreddits = settings.get("qotd", {}).get("subreddits", [])
+        
+        # Remove selected subreddits (case-insensitive)
+        for subreddit_to_remove in self.values:
+            subreddits = [s for s in subreddits if s.lower() != subreddit_to_remove.lower()]
+        
+        # Ensure at least one subreddit remains
+        if not subreddits:
+            await interaction.followup.send(
+                "❌ Cannot remove all subreddits! At least one subreddit must remain.",
+                ephemeral=True
+            )
+            return
+        
+        settings["qotd"]["subreddits"] = subreddits
+        save_settings(settings)
+        
+        removed_count = len(self.values)
+        await interaction.followup.send(
+            f"✅ Removed {removed_count} subreddit(s)!\n\nRemaining subreddits: {len(subreddits)}",
+            ephemeral=True
+        )
+        
+        # Refresh the main settings message
+        await self.settings_view.refresh_message(interaction)
+        
+        # Edit the message to remove the select menu
+        try:
+            await interaction.message.edit(content="✅ Subreddits removed successfully!", view=None)
+        except:
+            pass
+
+
+# View for remove subreddit selection
+class RemoveSubredditView(ui.View):
+    def __init__(self, subreddits, settings_view):
+        super().__init__(timeout=120)
+        self.add_item(RemoveSubredditSelect(subreddits, settings_view))
+
+
+# View for managing subreddits
+class ManageSubredditsView(ui.View):
+    def __init__(self, settings_view):
+        super().__init__(timeout=120)
+        self.settings_view = settings_view
+    
+    @ui.button(label="Add Subreddits", style=discord.ButtonStyle.success, emoji="➕", custom_id="add_subreddits")
+    async def add_button(self, interaction: discord.Interaction, button: ui.Button):
+        await interaction.response.send_modal(AddSubredditModal(self.settings_view))
+    
+    @ui.button(label="Remove Subreddits", style=discord.ButtonStyle.danger, emoji="➖", custom_id="remove_subreddits")
+    async def remove_button(self, interaction: discord.Interaction, button: ui.Button):
+        settings = load_settings()
+        subreddits = settings.get("qotd", {}).get("subreddits", [])
+        
+        if not subreddits:
+            await interaction.response.send_message(
+                "No subreddits to remove!",
+                ephemeral=True
+            )
+            return
+        
+        view = RemoveSubredditView(subreddits, self.settings_view)
+        await interaction.response.send_message(
+            "Select subreddits to remove:",
+            view=view,
+            ephemeral=True
+        )
+
+
 # View for managing authorized roles
 class ManageRolesView(ui.View):
     def __init__(self, settings_view):
@@ -558,12 +718,14 @@ class SettingsView(ui.View):
         qotd_settings = settings.get("qotd", {})
         movie_settings = settings.get("movie", {})
         authorized_roles = settings.get("authorized_roles", ["comrade"])
+        subreddits = qotd_settings.get("subreddits", ["randomquestions", "randomquestion"])
         
         text = "**⚙️ Bot Settings**\n\n"
         text += "**QOTD Settings:**\n"
         text += f"• Channel: `{qotd_settings.get('channel', 'Not set')}`\n"
         text += f"• Time: `{format_time(qotd_settings.get('time', {'hour': 12, 'minute': 0}))}` (Europe/Oslo)\n"
-        text += f"• Days: `{format_days(qotd_settings.get('days', []))}`\n\n"
+        text += f"• Days: `{format_days(qotd_settings.get('days', []))}`\n"
+        text += f"• Subreddits: `{', '.join('r/' + s for s in subreddits)}`\n\n"
         
         text += "**Movie Settings:**\n"
         text += f"• Channel: `{movie_settings.get('channel', 'Not set')}`\n"
@@ -597,6 +759,20 @@ class SettingsView(ui.View):
         current = settings.get("qotd", {}).get("days", [0, 1, 2, 3, 4, 5, 6])
         view = DaySelectView("qotd", current, self)
         await interaction.response.send_message("Select the days for QOTD:", view=view, ephemeral=True)
+    
+    @ui.button(label="Manage Subreddits", style=discord.ButtonStyle.primary, emoji="📋", custom_id="manage_subreddits")
+    async def manage_subreddits_button(self, interaction: discord.Interaction, button: ui.Button):
+        settings = load_settings()
+        subreddits = settings.get("qotd", {}).get("subreddits", [])
+        
+        subreddit_list = "\n".join([f"• r/{sub}" for sub in subreddits])
+        
+        view = ManageSubredditsView(self)
+        await interaction.response.send_message(
+            f"**QOTD Subreddits ({len(subreddits)}):**\n{subreddit_list}\n\nUse the buttons to add or remove subreddits.",
+            view=view,
+            ephemeral=True
+        )
     
     @ui.button(label="Movie Channel", style=discord.ButtonStyle.success, emoji="📺")
     async def movie_channel_button(self, interaction: discord.Interaction, button: ui.Button):

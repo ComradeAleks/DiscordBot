@@ -43,10 +43,7 @@ class QOTDBot(commands.Bot):
         self.tree.add_command(ping)
         # Add QOTD commands
         self.tree.add_command(qotd.qotd_repeat)
-        self.tree.add_command(qotd.qotd_ratings)
         self.tree.add_command(qotd.qotd_new)
-        self.tree.add_command(qotd.qotd_prompt)
-        self.tree.add_command(qotd.qotd_style)
         # Add movie commands
         self.tree.add_command(movies.movie_add)
         self.tree.add_command(movies.movie_choose)
