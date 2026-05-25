@@ -396,6 +396,10 @@ def create_qotd_embed(question_data):
         text=f"From r/{question_data['subreddit']} • Posted by u/{question_data['author']}"
     )
     
+    # Add image if available (and not spoilered/NSFW)
+    if 'image_url' in question_data:
+        embed.set_image(url=question_data['image_url'])
+    
     return embed
 
 

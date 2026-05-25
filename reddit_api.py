@@ -108,6 +108,22 @@ async def get_reddit_question(subreddit_list, used_questions):
                         permalink = post_data.get('permalink', '')
                         post_url = f"https://reddit.com{permalink}"
                         
+                        # Check for image data
+                        post_hint = post_data.get('post_hint', '')
+                        url = post_data.get('url', '')
+                        is_spoiler = post_data.get('spoiler', False)
+                        is_nsfw = post_data.get('over_18', False)
+                        
+                        # Skip posts with spoilered or NSFW images
+                        if post_hint == 'image' and (is_spoiler or is_nsfw):
+                            logger.debug(f"Skipping post with spoilered/NSFW image: {title[:50]}...")
+                            continue
+                        
+                        # Get image URL if it's a clean image
+                        image_url = None
+                        if post_hint == 'image' and not is_spoiler and not is_nsfw:
+                            image_url = url
+                        
                         # Skip if empty
                         if not title:
                             continue
@@ -132,13 +148,20 @@ async def get_reddit_question(subreddit_list, used_questions):
                         
                         # Found a valid unused question!
                         logger.info(f"Found unused question from r/{subreddit}: {cleaned_title[:50]}... ({word_count} words)")
-                        return {
+                        result = {
                             'title': cleaned_title,
                             'author': author,
                             'subreddit': subreddit,
                             'url': post_url,
                             'created_utc': created_utc
                         }
+                        
+                        # Add image URL if present
+                        if image_url:
+                            result['image_url'] = image_url
+                            logger.info(f"Post includes image: {image_url}")
+                        
+                        return result
                     
                     logger.info(f"No valid unused questions from r/{subreddit} (within 24h, >5 words)")
         

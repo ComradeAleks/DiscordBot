@@ -48,6 +48,7 @@ class QOTDBot(commands.Bot):
         self.tree.add_command(movies.movie_add)
         self.tree.add_command(movies.movie_choose)
         self.tree.add_command(movies.movie_list)
+        self.tree.add_command(movies.movie_test)
         # Add general commands
         self.tree.add_command(general.comrade_settings)
 
@@ -130,6 +131,9 @@ async def on_ready():
     
     # Check if we have a pending QOTD to send after reconnection
     await qotd.check_pending_qotd(bot)
+    
+    # Clean up expired movie selections
+    await movies.cleanup_movies_on_startup()
 
 
 async def run_bot_with_retry():

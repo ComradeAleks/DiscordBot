@@ -25,5 +25,8 @@
     "x-men 97",
     "betlejuice",
     "The Dark Crystal"
-  ]
+  ],
+  "metadata": {
+    "active_movie_selection": null
+  }
 }
