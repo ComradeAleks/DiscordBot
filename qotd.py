@@ -392,6 +392,14 @@ def create_qotd_embed(question_data):
         url=question_data['url']
     )
     
+    # Add description/context if available and meaningful
+    if question_data.get('description') and len(question_data['description'].strip()) > 10:
+        # Limit description to 1024 characters (Discord field limit)
+        description_text = question_data['description']
+        if len(description_text) > 1024:
+            description_text = description_text[:1021] + "..."
+        embed.add_field(name="Context", value=description_text, inline=False)
+    
     embed.set_footer(
         text=f"From r/{question_data['subreddit']} • Posted by u/{question_data['author']}"
     )
