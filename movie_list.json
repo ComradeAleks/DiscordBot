@@ -1,9 +1,7 @@
 {
   "movies": [
-    "Scary Movie",
     "Five Nights at Freddy's 2",
     "Scooby-Doo",
-    "Shrek",
     "Atlantis - The Lost Empire",
     "Deadpool & Wolverine",
     "Sonic the Hedgehog",
@@ -24,9 +22,20 @@
     "Final Destination 2",
     "x-men 97",
     "betlejuice",
-    "The Dark Crystal"
+    "The Dark Crystal",
+    "scary movie 2",
+    "scream"
   ],
   "metadata": {
-    "active_movie_selection": null
+    "active_movie_selection": {
+      "movie": "Shrek",
+      "list_position": 3,
+      "total_movies": 26,
+      "selected_at": 1780308002.1804152,
+      "watch_datetime": 1780515000.0,
+      "event_ids": {
+        "524872473473449984": 1510946007612133389
+      }
+    }
   }
 }

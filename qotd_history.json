@@ -37,7 +37,11 @@
     ["What is wrong with my lips?", null, 0, 0],
     ["Does anyone actually read the novels people put on their food blogs, or do y’all just immediately jump to recipe?", null, 0, 0],
     ["You ever wanted to wear a robe out in public?", null, 0, 0],
-    ["Does anyone enjoy spending ALL day at the beach?", null, 0, 0]
+    ["Does anyone enjoy spending ALL day at the beach?", null, 0, 0],
+    ["Do you think a vampire police man can enter your house uninvited if he has a warrant?", null, 0, 0],
+    ["What is the most refreshing fruit?", null, 0, 0],
+    ["What's the most disgusting thing that's ever entered your mouth?", null, 0, 0],
+    ["What's the one thing you wish your kids would stop doing?", null, 0, 0]
   ],
-  "last_qotd_date": "2026-05-25"
+  "last_qotd_date": "2026-05-28"
 }
