@@ -1,41 +1,42 @@
 {
   "movies": [
-    "Five Nights at Freddy's 2",
     "Scooby-Doo",
     "Atlantis - The Lost Empire",
     "Deadpool & Wolverine",
-    "Sonic the Hedgehog",
-    "the road to el-dorado",
-    "hoodwinkled",
-    "Paul",
-    "death of a unicorn",
     "the inbetweeners movie",
-    "until dawn",
-    "how to train your dragon (live action)",
-    "Pulp Fiction",
     "mr nobody",
     "the thing",
-    "sinister",
     "pandorum",
-    "Your highness",
     "hell comes to frogtown",
     "Final Destination 2",
     "x-men 97",
     "betlejuice",
     "The Dark Crystal",
     "scary movie 2",
-    "scream"
+    "scream",
+    "obsession",
+    "paprika anime",
+    "grave of the fireflies",
+    "castle in the sky",
+    "the cat returns",
+    "ponyo",
+    "the secret world of arrietty",
+    "spirited away",
+    "White chicks",
+    "The conjuring",
+    "night at museum",
+    "Paul the alien",
+    "gremlins",
+    "Sinners",
+    "Halloween",
+    "coraline",
+    "schindlers list",
+    "resident evil",
+    "the menu",
+    "brother bear",
+    "shrek 4"
   ],
   "metadata": {
-    "active_movie_selection": {
-      "movie": "Shrek",
-      "list_position": 3,
-      "total_movies": 26,
-      "selected_at": 1780308002.1804152,
-      "watch_datetime": 1780515000.0,
-      "event_ids": {
-        "524872473473449984": 1510946007612133389
-      }
-    }
+    "active_movie_selection": null
   }
 }
