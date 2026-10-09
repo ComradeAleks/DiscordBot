@@ -41,7 +41,33 @@
     "notification_time": {
       "hour": 12,
       "minute": 0
-    }
+    },
+    "tags": [
+      "Holiday",
+      "Scary",
+      "Funny",
+      "Animated",
+      "Adventure",
+      "Drama"
+    ],
+    "tag_days": [
+      {
+        "name": "Halloween",
+        "start": "10-01",
+        "end": "10-31",
+        "tags": [
+          "Scary"
+        ]
+      },
+      {
+        "name": "Christmas",
+        "start": "12-01",
+        "end": "12-31",
+        "tags": [
+          "Holiday"
+        ]
+      }
+    ]
   },
   "authorized_roles": [
     "comrade"

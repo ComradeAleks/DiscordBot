@@ -1,40 +1,227 @@
 {
   "movies": [
-    "Scooby-Doo",
-    "Atlantis - The Lost Empire",
-    "Deadpool & Wolverine",
-    "the inbetweeners movie",
-    "mr nobody",
-    "the thing",
-    "pandorum",
-    "hell comes to frogtown",
-    "Final Destination 2",
-    "x-men 97",
-    "betlejuice",
-    "The Dark Crystal",
-    "scary movie 2",
-    "scream",
-    "obsession",
-    "paprika anime",
-    "grave of the fireflies",
-    "castle in the sky",
-    "the cat returns",
-    "ponyo",
-    "the secret world of arrietty",
-    "spirited away",
-    "White chicks",
-    "The conjuring",
-    "night at museum",
-    "Paul the alien",
-    "gremlins",
-    "Sinners",
-    "Halloween",
-    "coraline",
-    "schindlers list",
-    "resident evil",
-    "the menu",
-    "brother bear",
-    "shrek 4"
+    {
+      "title": "Scooby-Doo",
+      "tags": [
+        "Funny"
+      ]
+    },
+    {
+      "title": "Atlantis - The Lost Empire",
+      "tags": [
+        "Animated",
+        "Adventure"
+      ]
+    },
+    {
+      "title": "Deadpool & Wolverine",
+      "tags": [
+        "Funny",
+        "Adventure"
+      ]
+    },
+    {
+      "title": "the inbetweeners movie",
+      "tags": [
+        "Funny"
+      ]
+    },
+    {
+      "title": "mr nobody",
+      "tags": [
+        "Drama"
+      ]
+    },
+    {
+      "title": "the thing",
+      "tags": [
+        "Scary"
+      ]
+    },
+    {
+      "title": "pandorum",
+      "tags": [
+        "Scary",
+        "Adventure"
+      ]
+    },
+    {
+      "title": "hell comes to frogtown",
+      "tags": [
+        "Funny"
+      ]
+    },
+    {
+      "title": "Final Destination 2",
+      "tags": [
+        "Scary"
+      ]
+    },
+    {
+      "title": "x-men 97",
+      "tags": [
+        "Animated",
+        "Adventure"
+      ]
+    },
+    {
+      "title": "betlejuice",
+      "tags": [
+        "Scary",
+        "Funny"
+      ]
+    },
+    {
+      "title": "The Dark Crystal",
+      "tags": [
+        "Adventure"
+      ]
+    },
+    {
+      "title": "scary movie 2",
+      "tags": [
+        "Scary",
+        "Funny"
+      ]
+    },
+    {
+      "title": "scream",
+      "tags": [
+        "Scary"
+      ]
+    },
+    {
+      "title": "obsession",
+      "tags": [
+        "Scary",
+        "Drama"
+      ]
+    },
+    {
+      "title": "paprika anime",
+      "tags": [
+        "Animated"
+      ]
+    },
+    {
+      "title": "grave of the fireflies",
+      "tags": [
+        "Animated",
+        "Drama"
+      ]
+    },
+    {
+      "title": "castle in the sky",
+      "tags": [
+        "Animated",
+        "Adventure"
+      ]
+    },
+    {
+      "title": "the cat returns",
+      "tags": [
+        "Animated"
+      ]
+    },
+    {
+      "title": "ponyo",
+      "tags": [
+        "Animated"
+      ]
+    },
+    {
+      "title": "the secret world of arrietty",
+      "tags": [
+        "Animated",
+        "Adventure"
+      ]
+    },
+    {
+      "title": "spirited away",
+      "tags": [
+        "Animated",
+        "Adventure"
+      ]
+    },
+    {
+      "title": "White chicks",
+      "tags": [
+        "Funny"
+      ]
+    },
+    {
+      "title": "The conjuring",
+      "tags": [
+        "Scary"
+      ]
+    },
+    {
+      "title": "night at museum",
+      "tags": [
+        "Funny"
+      ]
+    },
+    {
+      "title": "gremlins",
+      "tags": [
+        "Holiday",
+        "Scary",
+        "Funny"
+      ]
+    },
+    {
+      "title": "Sinners",
+      "tags": [
+        "Scary"
+      ]
+    },
+    {
+      "title": "Halloween",
+      "tags": [
+        "Scary"
+      ]
+    },
+    {
+      "title": "coraline",
+      "tags": [
+        "Scary",
+        "Animated"
+      ]
+    },
+    {
+      "title": "schindlers list",
+      "tags": [
+        "Drama"
+      ]
+    },
+    {
+      "title": "resident evil",
+      "tags": [
+        "Scary"
+      ]
+    },
+    {
+      "title": "the menu",
+      "tags": [
+        "Scary",
+        "Funny"
+      ]
+    },
+    {
+      "title": "brother bear",
+      "tags": [
+        "Animated",
+        "Adventure",
+        "Drama"
+      ]
+    },
+    {
+      "title": "shrek 4",
+      "tags": [
+        "Funny",
+        "Animated"
+      ]
+    }
   ],
   "metadata": {
     "active_movie_selection": null

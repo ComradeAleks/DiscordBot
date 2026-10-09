@@ -5,7 +5,6 @@ import asyncio
 import logging
 from dotenv import load_dotenv
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from apscheduler.triggers.cron import CronTrigger
 import pytz
 
 # Import QOTD, movie, and general modules
@@ -29,28 +28,46 @@ class QOTDBot(commands.Bot):
     def __init__(self):
         super().__init__(command_prefix="!", intents=intents, application_id=None)
         self.last_qotd = None
-        self.reconnecting = False
-        self.scheduler_started = False
+        self.setup_done = False
         self.scheduler = None  # Store scheduler instance
+        self.scheduler_started = False
         self.qotd_job_id = "qotd_job"
         self.movie_job_id = "movie_job"
-        self.last_qotd_date = None  # Track when we last sent a QOTD
+        self.last_qotd_date = None  # Track when we last sent a QOTD (Europe/Oslo date)
         self.pending_qotd = None  # Store a generated question that couldn't be sent
-        self.pending_qotd_date = None  # When the pending question was generated
         self.last_qotd_messages = []  # Store message objects for reaction tracking
 
     async def setup_hook(self):
-        self.tree.add_command(ping)
-        # Add QOTD commands
-        self.tree.add_command(qotd.qotd_repeat)
-        self.tree.add_command(qotd.qotd_new)
-        # Add movie commands
-        self.tree.add_command(movies.movie_add)
-        self.tree.add_command(movies.movie_choose)
-        self.tree.add_command(movies.movie_list)
-        self.tree.add_command(movies.movie_test)
-        # Add general commands
-        self.tree.add_command(general.comrade_settings)
+        # setup_hook runs on every login, so only do the one-time setup once
+        if not self.setup_done:
+            self.tree.add_command(ping)
+            # Add QOTD commands
+            self.tree.add_command(qotd.qotd_repeat)
+            self.tree.add_command(qotd.qotd_new)
+            # Add movie commands
+            self.tree.add_command(movies.movie_add)
+            self.tree.add_command(movies.movie_choose)
+            self.tree.add_command(movies.movie_list)
+            self.tree.add_command(movies.movie_test)
+            # Add general commands
+            self.tree.add_command(general.comrade_settings)
+
+            # Load the persistent last QOTD date from storage
+            try:
+                _, persistent_last_qotd_date = await qotd.load_question_data()
+                self.last_qotd_date = persistent_last_qotd_date
+                logger.info(f"Loaded last QOTD date from storage: {persistent_last_qotd_date}")
+            except Exception as e:
+                logger.error(f"Failed to load last QOTD date: {e}")
+
+            start_scheduler(self)
+            self.setup_done = True
+
+        try:
+            await self.tree.sync()
+            logger.info("Command tree synced successfully")
+        except Exception as e:
+            logger.error(f"Failed to sync command tree: {e}")
 
     async def on_disconnect(self):
         logger.warning("Bot disconnected from Discord!")
@@ -63,6 +80,14 @@ class QOTDBot(commands.Bot):
         await super().close()
 
 
+def start_scheduler(bot):
+    bot.scheduler = AsyncIOScheduler(timezone=pytz.timezone('Europe/Oslo'))
+    general.apply_schedule(bot)
+    bot.scheduler.start()
+    bot.scheduler_started = True
+    logger.info("Scheduler started successfully")
+
+
 @discord.app_commands.command(name="ping", description="Replies with Pong!")
 async def ping(interaction: discord.Interaction):
     await interaction.response.send_message("Pong!")
@@ -73,63 +98,11 @@ bot = QOTDBot()
 
 @bot.event
 async def on_ready():
+    # on_ready also fires after reconnecting with a new session (e.g. after an internet outage),
+    # so everything here must be safe to run more than once
     logger.info(f'Logged in as {bot.user.name}')
-    try:
-        await bot.tree.sync()
-        logger.info("Command tree synced successfully")
-    except Exception as e:
-        logger.error(f"Failed to sync command tree: {e}")
-        
-    # Load the persistent last QOTD date from storage
-    try:
-        _, _, _, persistent_last_qotd_date = await qotd.load_question_data()
-        if persistent_last_qotd_date:
-            bot.last_qotd_date = persistent_last_qotd_date
-            logger.info(f"Loaded last QOTD date from storage: {persistent_last_qotd_date}")
-        else:
-            logger.info("No last QOTD date found in storage")
-    except Exception as e:
-        logger.error(f"Failed to load last QOTD date: {e}")
-        
-    # Only start scheduler once, and don't restart on reconnections
-    if not bot.scheduler_started:
-        # Load settings for scheduler
-        settings = general.load_settings()
-        qotd_settings = settings.get("qotd", {})
-        movie_settings = settings.get("movie", {})
-        
-        bot.scheduler = AsyncIOScheduler(timezone=pytz.timezone('Europe/Oslo'))
-        
-        # QOTD scheduler with dynamic settings
-        qotd_time = qotd_settings.get("time", {"hour": 12, "minute": 0})
-        qotd_days = qotd_settings.get("days", [0, 1, 2, 3, 4, 5, 6])
-        # Convert day indices to day_of_week string (0=mon, 6=sun)
-        qotd_days_str = ','.join(['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'][i] for i in qotd_days)
-        bot.scheduler.add_job(
-            qotd.send_qotd, 
-            CronTrigger(day_of_week=qotd_days_str, hour=qotd_time['hour'], minute=qotd_time['minute']), 
-            args=[bot],
-            id=bot.qotd_job_id
-        )
-        
-        # Movie scheduler with dynamic settings (use notification time/day)
-        movie_notification_time = movie_settings.get("notification_time", {"hour": 12, "minute": 0})
-        movie_notification_days = movie_settings.get("notification_day", [4])
-        movie_notification_days_str = ','.join(['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'][i] for i in movie_notification_days)
-        bot.scheduler.add_job(
-            movies.choose_random_movie, 
-            CronTrigger(day_of_week=movie_notification_days_str, hour=movie_notification_time['hour'], minute=movie_notification_time['minute']), 
-            args=[bot],
-            id=bot.movie_job_id
-        )
-        
-        bot.scheduler.start()
-        bot.scheduler_started = True
-        logger.info(f"Scheduler started successfully (QOTD: {general.format_days(qotd_days)} at {general.format_time(qotd_time)}, Movie Notification: {general.format_days(movie_notification_days)} at {general.format_time(movie_notification_time)})")
-    else:
-        logger.info("Scheduler already running - not restarting")
-    
-    # Check if we have a pending QOTD to send after reconnection
+
+    # Send today's QOTD if it was missed while disconnected (only within the allowed time window)
     await qotd.check_pending_qotd(bot)
     
     # Clean up expired movie selections
@@ -164,6 +137,8 @@ async def run_bot_with_retry():
         if not bot.is_closed():
             logger.info("Closing bot connection before retry...")
             await bot.close()
+        # Reset internal state so the closed client can be started again
+        bot.clear()
             
         logger.info("Retrying bot connection in 10 seconds...")
         await asyncio.sleep(10)

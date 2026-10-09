@@ -24,7 +24,13 @@ def load_settings():
             "notification_time": {"hour": 12, "minute": 0},
             "notification_day": [4],  # 4=Friday
             "watch_time": {"hour": 19, "minute": 0},
-            "watch_day": [5]  # 5=Saturday
+            "watch_day": [5],  # 5=Saturday
+            "tags": ["Holiday", "Scary", "Funny", "Animated", "Adventure", "Drama"],
+            "tag_days": [
+                # Only pick movies with these tags when the movie night falls in this date range (MM-DD, every year)
+                {"name": "Halloween", "start": "10-01", "end": "10-31", "tags": ["Scary"]},
+                {"name": "Christmas", "start": "12-01", "end": "12-31", "tags": ["Holiday"]}
+            ]
         },
         "authorized_roles": ["comrade"]  # Roles that can use settings (case-insensitive)
     }
@@ -59,6 +65,8 @@ def save_settings(settings):
 def format_days(day_indices):
     """Format day indices to readable string."""
     day_names = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    if not day_indices:
+        return "None (off)"
     if len(day_indices) == 7:
         return "Every day"
     return ", ".join([day_names[i] for i in sorted(day_indices)])
@@ -81,45 +89,59 @@ def check_authorized(user_roles):
     return any(role in authorized_roles_lower for role in user_roles_lower)
 
 
+def schedule_job(bot, job_id, func, days, time_dict):
+    """(Re)create a scheduled job for the given days and time. With no days the job is removed (turned off)."""
+    from apscheduler.triggers.cron import CronTrigger
+
+    if bot.scheduler.get_job(job_id):
+        bot.scheduler.remove_job(job_id)
+
+    if not days:
+        logger.info(f"Job '{job_id}' has no days selected - turned off")
+        return
+
+    days_str = ','.join(['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'][i] for i in days)
+    bot.scheduler.add_job(
+        func,
+        # The timezone must be given here, otherwise CronTrigger uses the machine's local timezone
+        CronTrigger(day_of_week=days_str, hour=time_dict['hour'], minute=time_dict['minute'], timezone=bot.scheduler.timezone),
+        args=[bot],
+        id=job_id,
+        misfire_grace_time=600  # Still run if the event loop was briefly busy at the scheduled time
+    )
+
+
+def apply_schedule(bot):
+    """Create or update the QOTD and movie jobs from the current settings."""
+    import qotd
+    import movies
+
+    settings = load_settings()
+    qotd_settings = settings.get("qotd", {})
+    movie_settings = settings.get("movie", {})
+
+    qotd_time = qotd_settings.get("time", {"hour": 12, "minute": 0})
+    qotd_days = qotd_settings.get("days", [0, 1, 2, 3, 4, 5, 6])
+    schedule_job(bot, bot.qotd_job_id, qotd.send_qotd, qotd_days, qotd_time)
+
+    # Movie job uses notification time/day for when to select the movie
+    movie_notification_time = movie_settings.get("notification_time", {"hour": 12, "minute": 0})
+    movie_notification_days = movie_settings.get("notification_day", [4])
+    schedule_job(bot, bot.movie_job_id, movies.choose_random_movie, movie_notification_days, movie_notification_time)
+
+    logger.info(f"Schedule applied: QOTD ({format_days(qotd_days)} at {format_time(qotd_time)}), Movie Notification ({format_days(movie_notification_days)} at {format_time(movie_notification_time)})")
+
+
 def reload_scheduler(bot):
     """Reload scheduler jobs with updated settings."""
     try:
-        from apscheduler.triggers.cron import CronTrigger
-        import qotd
-        import movies
-        
         if not bot.scheduler or not bot.scheduler_started:
             logger.error("Scheduler not initialized")
             return False
-        
-        # Load current settings
-        settings = load_settings()
-        qotd_settings = settings.get("qotd", {})
-        movie_settings = settings.get("movie", {})
-        
-        # Update QOTD job
-        qotd_time = qotd_settings.get("time", {"hour": 12, "minute": 0})
-        qotd_days = qotd_settings.get("days", [0, 1, 2, 3, 4, 5, 6])
-        qotd_days_str = ','.join(['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'][i] for i in qotd_days)
-        
-        bot.scheduler.reschedule_job(
-            bot.qotd_job_id,
-            trigger=CronTrigger(day_of_week=qotd_days_str, hour=qotd_time['hour'], minute=qotd_time['minute'])
-        )
-        
-        # Update Movie job (use notification time/day for when to select the movie)
-        movie_notification_time = movie_settings.get("notification_time", {"hour": 12, "minute": 0})
-        movie_notification_days = movie_settings.get("notification_day", [4])
-        movie_notification_days_str = ','.join(['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'][i] for i in movie_notification_days)
-        
-        bot.scheduler.reschedule_job(
-            bot.movie_job_id,
-            trigger=CronTrigger(day_of_week=movie_notification_days_str, hour=movie_notification_time['hour'], minute=movie_notification_time['minute'])
-        )
-        
-        logger.info(f"Scheduler reloaded: QOTD ({format_days(qotd_days)} at {format_time(qotd_time)}), Movie Notification ({format_days(movie_notification_days)} at {format_time(movie_notification_time)})")
+
+        apply_schedule(bot)
         return True
-        
+
     except Exception as e:
         logger.error(f"Failed to reload scheduler: {e}")
         return False
@@ -321,6 +343,12 @@ class DaySelect(ui.Select):
         
         options = [
             discord.SelectOption(
+                label="No days (turn off)",
+                value="none",
+                default=not current_days
+            )
+        ] + [
+            discord.SelectOption(
                 label=day,
                 value=str(i),
                 default=(i in current_days)
@@ -331,15 +359,18 @@ class DaySelect(ui.Select):
         super().__init__(
             placeholder="Select days of the week",
             min_values=1,
-            max_values=7,
+            max_values=len(options),
             options=options
         )
     
     async def callback(self, interaction: discord.Interaction):
         await interaction.response.defer()
         
-        # Convert selected values to integers
-        selected_days = [int(v) for v in self.values]
+        # "No days" overrides any days selected alongside it
+        if "none" in self.values:
+            selected_days = []
+        else:
+            selected_days = [int(v) for v in self.values]
         
         # Update settings
         settings = load_settings()
@@ -696,6 +727,246 @@ class ManageRolesView(ui.View):
         )
 
 
+# Modal for adding movie tags
+class AddTagModal(ui.Modal, title="Add Movie Tags"):
+    def __init__(self, settings_view):
+        super().__init__()
+        self.settings_view = settings_view
+
+        self.tag_input = ui.TextInput(
+            label="Tag Name(s)",
+            placeholder="Enter tag names (separate multiple with commas)",
+            style=discord.TextStyle.short,
+            required=True,
+            max_length=500
+        )
+        self.add_item(self.tag_input)
+
+    async def on_submit(self, interaction: discord.Interaction):
+        await interaction.response.defer()
+        from movies import get_tags
+
+        settings = load_settings()
+        tags = list(get_tags(settings))
+
+        added_tags = []
+        already_exists = []
+        hit_limit = False
+        for name in (t.strip()[:50] for t in self.tag_input.value.split(',')):
+            if not name:
+                continue
+            if any(t.lower() == name.lower() for t in tags):
+                already_exists.append(name)
+            elif len(tags) >= 25:  # Discord select menus can show at most 25 tags
+                hit_limit = True
+            else:
+                tags.append(name)
+                added_tags.append(name)
+
+        response_parts = []
+        if added_tags:
+            settings["movie"]["tags"] = tags
+            save_settings(settings)
+            response_parts.append(f"✅ Added {len(added_tags)} tag(s): {', '.join(added_tags)}")
+            await self.settings_view.refresh_message(interaction)
+        if already_exists:
+            response_parts.append(f"⚠️ Already existed: {', '.join(already_exists)}")
+        if hit_limit:
+            response_parts.append("⚠️ Some tags were not added: the maximum is 25 tags.")
+
+        await interaction.followup.send("\n\n".join(response_parts) or "❌ No valid tags provided.", ephemeral=True)
+
+
+# Select menu for removing movie tags
+class RemoveTagSelect(ui.Select):
+    def __init__(self, tags, settings_view):
+        self.settings_view = settings_view
+
+        options = [discord.SelectOption(label=tag, value=tag) for tag in tags[:25]]
+
+        super().__init__(
+            placeholder="Select tags to remove",
+            min_values=1,
+            max_values=len(options),
+            options=options
+        )
+
+    async def callback(self, interaction: discord.Interaction):
+        from movies import get_tags, get_tag_days, load_movie_data, save_movie_data
+
+        removed = {v.lower() for v in self.values}
+
+        # Remove the tags from settings and from tag days; tag days left without tags are removed
+        settings = load_settings()
+        settings["movie"]["tags"] = [t for t in get_tags(settings) if t.lower() not in removed]
+        kept_tag_days = []
+        removed_tag_days = []
+        for tag_day in get_tag_days(settings):
+            tag_day["tags"] = [t for t in tag_day.get("tags", []) if t.lower() not in removed]
+            if tag_day["tags"]:
+                kept_tag_days.append(tag_day)
+            else:
+                removed_tag_days.append(tag_day.get("name", "Unnamed"))
+        settings["movie"]["tag_days"] = kept_tag_days
+        save_settings(settings)
+
+        # Remove the tags from all movies
+        movies_list, metadata = await load_movie_data()
+        untagged = 0
+        for movie in movies_list:
+            kept = [t for t in movie["tags"] if t.lower() not in removed]
+            if len(kept) != len(movie["tags"]):
+                movie["tags"] = kept
+                untagged += 1
+        await save_movie_data(movies_list, metadata)
+
+        content = f"✅ Removed {len(self.values)} tag(s): {', '.join(self.values)}\n• Removed from {untagged} movie(s)"
+        if removed_tag_days:
+            content += f"\n• Tag days removed because they had no tags left: {', '.join(removed_tag_days)}"
+        await interaction.response.edit_message(content=content, view=None)
+        await self.settings_view.refresh_message(interaction)
+
+
+# View for remove tag selection
+class RemoveTagView(ui.View):
+    def __init__(self, tags, settings_view):
+        super().__init__(timeout=120)
+        self.add_item(RemoveTagSelect(tags, settings_view))
+
+
+# View for managing movie tags
+class ManageTagsView(ui.View):
+    def __init__(self, settings_view):
+        super().__init__(timeout=120)
+        self.settings_view = settings_view
+
+    @ui.button(label="Add Tags", style=discord.ButtonStyle.success, emoji="➕")
+    async def add_button(self, interaction: discord.Interaction, button: ui.Button):
+        await interaction.response.send_modal(AddTagModal(self.settings_view))
+
+    @ui.button(label="Remove Tags", style=discord.ButtonStyle.danger, emoji="➖")
+    async def remove_button(self, interaction: discord.Interaction, button: ui.Button):
+        from movies import get_tags
+        tags = get_tags(load_settings())
+
+        if not tags:
+            await interaction.response.send_message("No tags to remove!", ephemeral=True)
+            return
+
+        await interaction.response.send_message(
+            "Select tags to remove (they will also be removed from all movies and tag days):",
+            view=RemoveTagView(tags, self.settings_view),
+            ephemeral=True
+        )
+
+
+# Modal for adding a tag day
+class AddTagDayModal(ui.Modal, title="Add Tag Day"):
+    def __init__(self, settings_view):
+        super().__init__()
+        self.settings_view = settings_view
+
+        self.name_input = ui.TextInput(label="Name", placeholder="e.g., Halloween", required=True, max_length=50)
+        self.start_input = ui.TextInput(label="Start date (MM-DD)", placeholder="e.g., 10-01", required=True, max_length=5)
+        self.end_input = ui.TextInput(label="End date (MM-DD, leave empty for one day)", placeholder="e.g., 10-31", required=False, max_length=5)
+        self.tags_input = ui.TextInput(label="Tags (separate multiple with commas)", placeholder="e.g., Scary", required=True, max_length=500)
+        for item in (self.name_input, self.start_input, self.end_input, self.tags_input):
+            self.add_item(item)
+
+    async def on_submit(self, interaction: discord.Interaction):
+        from movies import get_tags, parse_month_day, parse_tag_list, format_tag_day
+
+        start = self.start_input.value.strip()
+        end = self.end_input.value.strip() or start
+        if not parse_month_day(start) or not parse_month_day(end):
+            await interaction.response.send_message("❌ Invalid date. Use MM-DD, e.g. `10-31` for October 31st.", ephemeral=True)
+            return
+
+        settings = load_settings()
+        all_tags = get_tags(settings)
+
+        tags, unknown = parse_tag_list(self.tags_input.value, all_tags)
+
+        if unknown or not tags:
+            await interaction.response.send_message(
+                f"❌ Unknown tag(s): {', '.join(unknown) or 'none given'}\n\nAvailable tags: {', '.join(all_tags) or 'none (add some first)'}",
+                ephemeral=True
+            )
+            return
+
+        tag_day = {"name": self.name_input.value.strip(), "start": start, "end": end, "tags": tags}
+        settings["movie"].setdefault("tag_days", []).append(tag_day)
+        save_settings(settings)
+
+        await interaction.response.send_message(f"✅ Added tag day: {format_tag_day(tag_day)}", ephemeral=True)
+        await self.settings_view.refresh_message(interaction)
+
+
+# Select menu for removing tag days
+class RemoveTagDaySelect(ui.Select):
+    def __init__(self, tag_days, settings_view):
+        from movies import format_tag_day
+        self.settings_view = settings_view
+
+        options = [
+            discord.SelectOption(label=tag_day.get("name", "Unnamed")[:100], value=str(i), description=format_tag_day(tag_day)[:100])
+            for i, tag_day in enumerate(tag_days[:25])
+        ]
+
+        super().__init__(
+            placeholder="Select tag days to remove",
+            min_values=1,
+            max_values=len(options),
+            options=options
+        )
+
+    async def callback(self, interaction: discord.Interaction):
+        from movies import get_tag_days
+
+        settings = load_settings()
+        tag_days = get_tag_days(settings)
+        selected = {int(v) for v in self.values}
+        removed = [td.get("name", "Unnamed") for i, td in enumerate(tag_days) if i in selected]
+        settings["movie"]["tag_days"] = [td for i, td in enumerate(tag_days) if i not in selected]
+        save_settings(settings)
+
+        await interaction.response.edit_message(content=f"✅ Removed tag day(s): {', '.join(removed)}", view=None)
+        await self.settings_view.refresh_message(interaction)
+
+
+# View for remove tag day selection
+class RemoveTagDayView(ui.View):
+    def __init__(self, tag_days, settings_view):
+        super().__init__(timeout=120)
+        self.add_item(RemoveTagDaySelect(tag_days, settings_view))
+
+
+# View for managing tag days
+class ManageTagDaysView(ui.View):
+    def __init__(self, settings_view):
+        super().__init__(timeout=120)
+        self.settings_view = settings_view
+
+    @ui.button(label="Add Tag Day", style=discord.ButtonStyle.success, emoji="➕")
+    async def add_button(self, interaction: discord.Interaction, button: ui.Button):
+        await interaction.response.send_modal(AddTagDayModal(self.settings_view))
+
+    @ui.button(label="Remove Tag Days", style=discord.ButtonStyle.danger, emoji="➖")
+    async def remove_button(self, interaction: discord.Interaction, button: ui.Button):
+        from movies import get_tag_days
+        tag_days = get_tag_days(load_settings())
+
+        if not tag_days:
+            await interaction.response.send_message("No tag days to remove!", ephemeral=True)
+            return
+
+        await interaction.response.send_message(
+            "Select tag days to remove:",
+            view=RemoveTagDayView(tag_days, self.settings_view),
+            ephemeral=True
+        )
+
+
 # Main settings view with buttons
 class SettingsView(ui.View):
     def __init__(self, original_interaction):
@@ -732,7 +1003,18 @@ class SettingsView(ui.View):
         text += f"• Notification Time: `{format_time(movie_settings.get('notification_time', {'hour': 12, 'minute': 0}))}` (Europe/Oslo)\n"
         text += f"• Notification Day: `{format_days(movie_settings.get('notification_day', []))}`\n"
         text += f"• Watch Time: `{format_time(movie_settings.get('watch_time', {'hour': 19, 'minute': 0}))}` (Europe/Oslo)\n"
-        text += f"• Watch Day: `{format_days(movie_settings.get('watch_day', []))}`\n\n"
+        text += f"• Watch Day: `{format_days(movie_settings.get('watch_day', []))}`\n"
+
+        from movies import get_tags, get_tag_days, format_tag_day
+        tags = get_tags(settings)
+        tag_days = get_tag_days(settings)
+        text += f"• Tags: `{', '.join(tags) if tags else 'None'}`\n"
+        if tag_days:
+            text += "• Tag Days (only movies with these tags are picked):\n"
+            text += "".join(f"  - `{format_tag_day(td)}`\n" for td in tag_days)
+        else:
+            text += "• Tag Days: `None`\n"
+        text += "\n"
         
         text += "**Authorized Roles:**\n"
         text += f"• Roles: `{', '.join(authorized_roles)}`\n\n"
@@ -806,6 +1088,32 @@ class SettingsView(ui.View):
         view = DaySelectView("movie_watch", current, self)
         await interaction.response.send_message("Select the day(s) when the movie will be watched:", view=view, ephemeral=True)
     
+    @ui.button(label="Movie Tags", style=discord.ButtonStyle.success, emoji="🏷️", row=2)
+    async def movie_tags_button(self, interaction: discord.Interaction, button: ui.Button):
+        from movies import get_tags
+        tags = get_tags(load_settings())
+        tag_list = "\n".join(f"• `{tag}`" for tag in tags) or "No tags yet."
+
+        await interaction.response.send_message(
+            f"**Movie Tags ({len(tags)}):**\n{tag_list}\n\nUse the buttons to add or remove tags. Tag movies from `/movie-list`.",
+            view=ManageTagsView(self),
+            ephemeral=True
+        )
+
+    @ui.button(label="Tag Days", style=discord.ButtonStyle.success, emoji="🎃", row=2)
+    async def tag_days_button(self, interaction: discord.Interaction, button: ui.Button):
+        from movies import get_tag_days, format_tag_day
+        tag_days = get_tag_days(load_settings())
+        tag_day_list = "\n".join(f"• `{format_tag_day(td)}`" for td in tag_days) or "No tag days yet."
+
+        await interaction.response.send_message(
+            f"**Tag Days ({len(tag_days)}):**\n{tag_day_list}\n\n"
+            f"When a movie night falls within a tag day, only movies with at least one of its tags are picked. "
+            f"Dates are MM-DD and repeat every year.",
+            view=ManageTagDaysView(self),
+            ephemeral=True
+        )
+
     @ui.button(label="Manage Roles", style=discord.ButtonStyle.secondary, emoji="👥", row=2, custom_id="manage_auth_roles")
     async def manage_roles_button(self, interaction: discord.Interaction, button: ui.Button):
         settings = load_settings()
