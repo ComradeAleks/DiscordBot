@@ -5,12 +5,14 @@ import asyncio
 import logging
 from dotenv import load_dotenv
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.triggers.cron import CronTrigger
 import pytz
 
-# Import QOTD, movie, and general modules
+# Import QOTD, movie, general and updater modules
 import qotd
 import movies
 import general
+import updater
 
 load_dotenv()
 
@@ -83,6 +85,14 @@ class QOTDBot(commands.Bot):
 def start_scheduler(bot):
     bot.scheduler = AsyncIOScheduler(timezone=pytz.timezone('Europe/Oslo'))
     general.apply_schedule(bot)
+    # Daily check for new code on GitHub
+    bot.scheduler.add_job(
+        updater.check_for_updates,
+        CronTrigger(hour=updater.UPDATE_TIME['hour'], minute=updater.UPDATE_TIME['minute'], timezone=bot.scheduler.timezone),
+        args=[bot],
+        id="update_job",
+        misfire_grace_time=600
+    )
     bot.scheduler.start()
     bot.scheduler_started = True
     logger.info("Scheduler started successfully")

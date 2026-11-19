@@ -243,23 +243,23 @@ async def record_question_used(title, sent_date=None):
 
 
 async def generate_new_qotd():
-    """Fetch a new, unused QOTD from Reddit. It is only added to the history once it has been posted."""
-    from reddit_api import get_reddit_question
+    """Fetch a new, unused QOTD from Lemmy. It is only added to the history once it has been posted."""
+    from lemmy_api import get_lemmy_question, DEFAULT_COMMUNITIES
     from general import load_settings
 
-    logger.info("Generating new QOTD from Reddit")
+    logger.info("Generating new QOTD from Lemmy")
 
     settings = load_settings()
-    subreddit_list = settings.get("qotd", {}).get("subreddits", ["randomquestions", "randomquestion"])
+    community_list = settings.get("qotd", {}).get("communities", DEFAULT_COMMUNITIES)
 
     history, _ = await load_question_data()
     used_questions = [item[0] for item in history]
 
-    question_data = await get_reddit_question(subreddit_list, used_questions)
+    question_data = await get_lemmy_question(community_list, used_questions)
 
     if not question_data:
-        logger.error("Failed to fetch question from Reddit")
-        raise Exception("Could not find any unused questions from Reddit in the past 24h. Try adding more subreddits.")
+        logger.error("Failed to fetch question from Lemmy")
+        raise Exception("Could not find any unused questions from Lemmy this week. Try adding more communities.")
 
     return question_data
 
@@ -282,7 +282,7 @@ def create_qotd_embed(question_data):
         embed.add_field(name="Context", value=description_text, inline=False)
 
     embed.set_footer(
-        text=f"From r/{question_data['subreddit']} • Posted by u/{question_data['author']}"
+        text=f"From {question_data['community']} • Posted by {question_data['author']}"
     )
 
     # Add image if available (and not spoilered/NSFW)
@@ -304,7 +304,7 @@ async def qotd_repeat(interaction: discord.Interaction):
         await interaction.response.send_message("No QOTD has been sent yet!", ephemeral=True)
 
 
-@discord.app_commands.command(name="qotd-new", description="Get a new question from Reddit")
+@discord.app_commands.command(name="qotd-new", description="Get a new question from Lemmy")
 async def qotd_new(interaction: discord.Interaction):
     await interaction.response.defer()
     bot = interaction.client
